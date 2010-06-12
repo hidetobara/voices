@@ -3,15 +3,22 @@ require_once( INCLUDE_DIR . "DB/BaseDB.php" );
 
 class VoiceInfo
 {
+	const TITLE_LENGTH_MAX = 64;
+	const ARTIST_LENGTH_MAX = 64;
+	const DESCRIPTION_LENGTH_MAX = 512;
+	const TAG_LENGTH_MAX = 16;
+	const TAGS_MAX = 10;
+	
 	public $voiceid;
 	public $userid;
 	public $dst;
 	public $playedCount;
 	public $playble;
-	public $uploadDate;
+	public $uploadTime;
 	
 	public $thumbnailid;
 	public $title;
+	public $artist;
 	public $description;
 	public $tags;
 	
@@ -19,17 +26,44 @@ class VoiceInfo
 	{
 		if( is_array($p) )
 		{
-			$this->voiceid = int($p['voice_id']);
-			$this->userid = int($p['user_id']);
-			$this->title = $p['title'];
-			$this->dst = $p['dst'];
-			$this->playedCount = int($p['played_count']);
-			if(is_string($p['upload_date'])) $this->uploadDate = new DateTime($p['upload_date']);
-			
-			$this->thumbnailid = int($p['thumbnail_id']);
-			$this->title = $p['title'];
-			$this->description = $p['description'];
-			if(is_string($p['tags'])) $this->tags = mb_split(' ',$p['tags']);
+			$this->copyInfo( $p );
+			$this->copyDetail( $p );
+		}
+	}
+	function copyInfo( Array $p )
+	{
+		if(is_numeric($p['voice_id'])) $this->voiceid = intval($p['voice_id']);
+		if(is_numeric($p['user_id'])) $this->userid = intval($p['user_id']);
+		if($p['dst']) $this->dst = $p['dst'];
+		if(is_numeric($p['played_count'])) $this->playedCount = intval($p['played_count']);
+		if(is_string($p['upload_time'])) $this->uploadTime = new DateTime($p['upload_time']);
+	}
+	function copyDetail( Array $p )
+	{
+		if(is_numeric($p['thumbnail_id'])) $this->thumbnailid = intval($p['thumbnail_id']);
+		if($p['title']) $this->title = htmlspecialchars($p['title']);
+		if($p['artist']) $this->artist = htmlspecialchars($p['artist']);
+		if($p['description']) $this->description = htmlspecialchars($p['description']);
+		if(is_string($p['tags']))
+		{
+			$this->tags = mb_split(' ',strip_tags($p['tags']));
+			array_slice($this->tags, 0, self::TAGS_MAX);
+		}
+	}
+	function checkDetail()
+	{
+		if( mb_strlen($this->title) > self::TITLE_LENGTH_MAX )
+			throw new VoiceException("Too long title.");
+		if( mb_strlen($this->artist) > self::TITLE_LENGTH_MAX )
+			throw new VoiceException("Too long artist name.");
+		if( mb_strlen($this->description) > self::DESCRIPTION_LENGTH_MAX )
+			throw new VoiceException("Too long description.");
+		if( is_array($this->tags) )
+		{
+			foreach( $this->tags as $tag )
+			{
+				if( mb_strlen($tag) > self::TAG_LENGTH_MAX ) throw new VoiceException("Too long tag.");
+			}
 		}
 	}
 }
@@ -39,65 +73,86 @@ class VoiceInfoDB extends VoicesDB
 	const TABLE_INFO = 'voice_info';
 	const TABLE_DETAIL = 'voice_detail';
 	
-	function setInfo( VoiceInfo $info )
-	{	///// info
+	function newInfo( $userid )
+	{
 		$now = date('c');
-		$sql = sprintf("INSERT INTO %s (`user_id`,dst`,`upload_time`) VALUES(:userid,:dst,:now)",
+		$sql = sprintf("INSERT INTO %s (`user_id`,`upload_time`) VALUES(:userid,:now)",
 			self::TABLE_INFO);
 		$params = array(
-			':userid' => $info->userid,
-			':dst' => $info->dst,
+			':userid' => $userid,
 			':now' => $now );
 		$state = $this->pdo->prepare( $sql );
 		if( !$state->execute( $params ) ) return null;
 		
 		$sql = sprintf("SELECT * FROM %s WHERE `user_id`=:userid AND `upload_time`=:now LIMIT 1",
-			self::TABLE_INFO);
+			self::TABLE_INFO );
 		$state = $this->pdo->prepare( $sql );
 		if( !$state->execute( $params ) ) return null;
 		
-		///// detail
 		$hash = $state->fetch( PDO::FETCH_ASSOC );
-		$vid = $hash['voice_id'];
-		if( !$vid ) return null;
-		$sql = sprintf("INSERT INTO %s (`voice_id`,`thumbnail_id`,`title`,`description`,`tags`) VALUES(:voiceid,:thumbid,:title,:dsc,:tags)",
+		
+		$sql = sprintf("INSERT INTO %s (`voice_id`) VALUES(:vid)",
 			self::TABLE_DETAIL);
-		$params = array(
-			':voiceid' => $vid,
-			':thumbid' => $info->thumbnailid,
-			':title' => $info->title,
-			':dsc' => $info->description,
-			':tags' => is_array($info->tags) ? implode(' ',$info->tags) : '' );
+		$params = array( ':vid' => $hash['voice_id'] );		
 		$state = $this->pdo->prepare( $sql );
 		if( !$state->execute( $params ) ) return null;
 		
-		$info->voiceid = $vid;
-		return $info;
+		return new VoiceInfo( $hash );
 	}
 	
+	function updateInfo( VoiceInfo $info )
+	{	///// info
+		$sql = sprintf("UPDATE %s SET `dst`=:dst WHERE `voice_id`=:vid",
+			self::TABLE_INFO );
+		$params = array(
+			':dst' => $info->dst,
+			':vid' => $info->voiceid );
+		$state = $this->pdo->prepare( $sql );
+		if( !$state->execute( $params ) ) return false;
+		return true;	
+	}
+
 	function updateDetail( VoiceInfo $info )
 	{
-		
+		$sql = sprintf( "UPDATE %s SET `thumbnail_id`=:tid,`title`=:title,`artist`=:art,`description`=:desc,`tags`=:tags WHERE `voice_id`=:vid",
+			self::TABLE_DETAIL );
+		$params = array(
+			':tid' => $info->thumbnailid ? $info->thumbnailid : 0,
+			':title' => $info->title,
+			':art' => $info->artist,
+			':desc' => $info->description,
+			':tags' => is_array($info->tags) ? implode(' ',$info->tags) : '',
+			':vid' => $info->voiceid );
+		$state = $this->pdo->prepare( $sql );
+		if( !$state->execute( $params ) ) return false;
+		return true;
 	}
 	
-	function getInfo( $vid, $needdetail=false )
+	function getInfo( $vid )
 	{
 		$params = array(
-			':voiceid' => $vid );
-		$sql = sprintf("SELECT * FROM %s WHERE `voice_id`=:voiceid LIMIT 1",
+			':vid' => $vid );
+		$sql = sprintf("SELECT * FROM %s WHERE `voice_id`=:vid LIMIT 1",
 			self::TABLE_INFO);
 		$state = $this->pdo->prepare( $sql );
 		if( !$state->execute( $params ) ) return null;
 		
 		$info = $state->fetch( PDO::FETCH_ASSOC );
-		if( !$needdetail ) return new VoiceInfo( $info );
+		return new VoiceInfo( $info );		
+	}
+	function getDetail( VoiceInfo $i )
+	{
+		if( !$i->voiceid ) return null;
 		
-		$sql = sprintf("SELECT * FROM %s WHERE `voice_id`=:voiceid LIMIT 1",
+		$params = array(
+			':vid' => $i->voiceid );
+		$sql = sprintf("SELECT * FROM %s WHERE `voice_id`=:vid LIMIT 1",
 			self::TABLE_DETAIL);
 		$state = $this->pdo->prepare( $sql );
-		if( !$state->execute( $params ) ) return new VoiceInfo( $info );
+		if( !$state->execute( $params ) ) return null;
 		
 		$detail = $state->fetch( PDO::FETCH_ASSOC );
-		return new VoiceInfo( array_merge($info,$detail) );
+		$i->copyDetail( $detail );
+		return $i;
 	}
 }

@@ -1,28 +1,16 @@
 <?php
 require_once( SMARTY_DIR . 'Smarty.class.php' );
 require_once( 'Log.php' );
+require_once( INCLUDE_DIR . 'VoiceException.php' );
 
-
-class WebException extends Exception
-{
-	public $location;
-	public $array;
-	public $module;
-	function __construct( $message, $module, $array=null )	
-	{
-		parent::__construct( $message );
-		$this->location = $this->getFile() . "#" . $this->getLine();
-		$this->module = $module;
-		$this->array = $array;
-	}
-}
 
 class BaseWeb
 {
+	protected $userid = 1;	
+	
 	protected $assigned;
 	protected $module;
 	protected $template;
-	
 
 	function __construct( $options=null )
 	{
@@ -33,7 +21,7 @@ class BaseWeb
 			'ENV_TYPE' => ENV_TYPE,
 			) );
 			
-		$this->module = 'web/';
+		$this->module = 'web';
 		$this->template = 'error.tpl';
 	}
 	
@@ -49,16 +37,16 @@ class BaseWeb
 		{
 			$this->initialize();
 			$this->handle();
-			$this->display();
-			$this->finalize();
 		}
-		catch(WebException $ex)
+		catch(VoiceException $ex)
 		{
-			$path = LOG_DIR . 'web/' . $ex->module . data('Ymd') . '.log';
+			$path = LOG_DIR . 'web/' . $this->module . date('Ymd') . '.log';
 			Log::singleton('file', $path, 'ERR', array('mode'=>0777))
 				->log( $ex->getMessage() . " @" . $ex->location . " :" . var_export($ex->array,true) );
-			$this->assign( 'message', $ex->getMessage() );
+			$this->assign( 'error', $ex->getMessage() );
 		}
+		$this->display();
+		$this->finalize();
 	}
 	
 	protected function initialize()
@@ -79,7 +67,7 @@ class BaseWeb
 		
 		$smarty->assign( $this->assigned );
 		
-		$path = SMARTY_TEMPLATE_DIR . $this->module . $this->template;
+		$path = SMARTY_TEMPLATE_DIR . $this->module . '/' . $this->template;
 		if( file_exists($path) ) $smarty->display( $path );
 	}
 	
