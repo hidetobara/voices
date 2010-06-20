@@ -68,7 +68,7 @@ class VoiceInfo
 	}
 }
 
-class VoiceInfoDB extends VoicesDB
+class VoiceInfoDB extends BaseDB
 {
 	const TABLE_INFO = 'voice_info';
 	const TABLE_DETAIL = 'voice_detail';

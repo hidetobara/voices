@@ -1,9 +1,10 @@
 <?php
 
-class VoicesDB
+class BaseDB
 {
+	const ERROR_NO_SESSION = 'you do not login ! you need to login.';
+	
 	protected $pdo;
-
 	
 	function __construct( $options=null )
 	{

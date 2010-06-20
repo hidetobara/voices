@@ -10,18 +10,21 @@ class BaseWeb
 	
 	protected $assigned;
 	protected $module;
+	protected $name;
 	protected $template;
 
-	function __construct( $options=null )
+	function __construct( $opt=null )
 	{
 		$this->assigned = array();
 		
 		$this->assignHash( array(
 			'HOME_URL' => HOME_URL,
 			'ENV_TYPE' => ENV_TYPE,
+			'API_URL' => API_URL,
 			) );
 			
 		$this->module = 'web';
+		$this->name = 'default';
 		$this->template = 'error.tpl';
 	}
 	
@@ -40,7 +43,7 @@ class BaseWeb
 		}
 		catch(VoiceException $ex)
 		{
-			$path = LOG_DIR . 'web/' . $this->module . date('Ymd') . '.log';
+			$path = LOG_DIR . 'web/' . $this->name . date('Ymd') . '.log';
 			Log::singleton('file', $path, 'ERR', array('mode'=>0777))
 				->log( $ex->getMessage() . " @" . $ex->location . " :" . var_export($ex->array,true) );
 			$this->assign( 'error', $ex->getMessage() );
