@@ -1,33 +1,35 @@
 <?php
 require_once( "../configure.php" );
 require_once( INCLUDE_DIR . "web/BaseWeb.php" );
-require_once( INCLUDE_DIR . "web/SessionInfo.php" );
-require_once( INCLUDE_DIR . "DB/VoiceInfo.php" );
 require_once( INCLUDE_DIR . "File/VoiceFile.php" );
+require_once( INCLUDE_DIR . "File/ImageFile.php" );
+
 
 class UploadWeb extends BaseWeb
-{
-	const WARN_NOT_AUDIO = 'This file is not audio file.';
-	
+{	
 	public $mode;
-	public $file;
-	public $db;
+
+	public $voiceFile;
+	public $voiceDb;
+	public $imageFile;
+	public $imageDb;
 	
 	function __construct( $opt=null )
 	{
 		parent::__construct( $opt );
 		
-		$this->module = 'web';
 		$this->name = 'upload';
-		$this->template = 'voice.tpl';
+		$this->template = 'upload.tpl';
 		
-		$this->file = $opt['VoiceFile'] ? $opt['VoiceFile'] : new VoiceFile();
-		$this->db = $opt['VoiceInfoDB'] ? $opt['VoiceInfoDB'] : new VoiceInfoDB();
+		$this->voiceFile = $opt['VoiceFile'] ? $opt['VoiceFile'] : new VoiceFile();
+		$this->voiceDb = $opt['VoiceInfoDB'] ? $opt['VoiceInfoDB'] : new VoiceInfoDB();
+		$this->imageFile = $opt['ImageFile'] ? $opt['ImageFile'] : new ImageFile();
+		$this->imageDb = $opt['ImageInfoDB'] ? $opt['ImageInfoDB'] : new ImageInfoDB();
 	}
 	
 	function initialize()
 	{
-		if( !SessionInfo::get()->check() ) throw new VoiceException(self::ERROR_NO_SESSION);
+		$this->checkSession();
 		
 		//var_dump($_FILES);
 		$this->mode = $_REQUEST['mode'];
@@ -43,19 +45,18 @@ class UploadWeb extends BaseWeb
 				$this->assign('next_mode','upload');
 				break;
 			case 'upload':
-				$this->uploadVoice( $_FILES['voice_file'] );
+				$this->uploadVoice( $_FILES['voice_file'], $_FILES['image_file'] );
 				break;
 		}
 	}
 	
-	function uploadVoice( $data )
+	function uploadVoice( $vfile, $ifile )
 	{
-		$info = new VoiceInfo( $_REQUEST );
-		$this->assign('upinfo',$info);
+		$vinfo = new VoiceInfo( $_REQUEST );
+		$this->assign( 'upinfo', $vinfo );
 		try
 		{
-			if( $data['type'] != 'audio/mpeg' ) throw new VoiceException( self::WARN_NOT_AUDIO );
-			$info->checkDetail();
+			$vinfo->checkDetail();
 		}
 		catch(Exception $ex)
 		{
@@ -64,13 +65,20 @@ class UploadWeb extends BaseWeb
 			throw $ex;
 		}
 
-		$info = $this->db->newInfo( $this->userid );
-		$info->copyDetail( $_REQUEST );
+		if( $ifile )
+		{
+			$iinfo = $this->imageDb->newInfo( $this->userid );
+			$this->imageFile->save( $ifile, $iinfo );
+		}
 		
-		$dst = $this->file->save( $data, $info );
-		$info->dst = $dst;
-		$this->db->updateInfo( $info );
-		$this->db->updateDetail( $info );
+		$vinfo = $this->voiceDb->newInfo( $this->userid );
+		$vinfo->copyDetail( $_REQUEST );
+		
+		$dst = $this->voiceFile->save( $vfile, $vinfo );
+		$vinfo->dst = $dst;
+		if( $iinfo ) $vinfo->imageid = $iinfo->imageid;
+		$this->voiceDb->updateInfo( $vinfo );
+		$this->voiceDb->updateDetail( $vinfo );
 	}
 }
 $web = new UploadWeb();

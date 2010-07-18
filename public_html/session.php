@@ -1,7 +1,6 @@
 <?php
 require_once( "../configure.php" );
 require_once( INCLUDE_DIR . "web/BaseWeb.php" );
-require_once( INCLUDE_DIR . "web/SessionInfo.php" );
 require_once( INCLUDE_DIR . "DB/UserInfo.php" );
 
 class SessionWeb extends BaseWeb
@@ -17,7 +16,6 @@ class SessionWeb extends BaseWeb
 	{
 		parent::__construct( $opt );
 		
-		$this->module = 'web';
 		$this->name = 'session';
 		$this->template = 'session.tpl';
 		
@@ -29,7 +27,7 @@ class SessionWeb extends BaseWeb
 		$this->user = new UserInfo( $_REQUEST );
 		
 		$this->mode = self::MODE_NOT_LOGINED;
-		if( SessionInfo::get()->check() )
+		if( LoginSession::get()->check() )
 		{
 			$this->mode = self::MODE_LOGINED;
 			$this->assign('logined',true);
@@ -44,16 +42,16 @@ class SessionWeb extends BaseWeb
 			case self::MODE_NOT_LOGINED:
 				if( $command!='login' ) break;
 				$this->user = $this->db->authorizeUser( $this->user );
-				if( !$this->user->userId ) throw new VoiceException('Login error !');
+				if( !$this->user->userId ) throw new VoiceException(CommonMessages::get()->msg('LOGIN_ERROR'));
 				
-				SessionInfo::get()->make( $this->user->userId ); 
+				LoginSession::get()->make( $this->user->userId ); 
 				$this->assign('logined',true);
 				break;
 				
 			case self::MODE_LOGINED:
 				if( $command=='logout' )
 				{
-					SessionInfo::get()->clear();
+					LoginSession::get()->clear();
 					$this->assign('logined',false);
 				}
 				break;

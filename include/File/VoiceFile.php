@@ -3,8 +3,10 @@ require_once( INCLUDE_DIR . "DB/VoiceInfo.php" );
 
 
 class VoiceFile
-{
-	const ERROR_NO_AUDIO_FILE = 'This file is not audio';
+{	
+	private $validContentTypes = array(
+		'audio/mp3' => 'mp3',
+		'audio/mpeg' => 'mp3' );
 	
 	function __construct( $options=null )
 	{
@@ -17,19 +19,15 @@ class VoiceFile
 	function save( Array $src, VoiceInfo $info )
 	{
 		$pathSrc = $src['tmp_name'];
-		if( $src['type'] != 'audio/mpeg' ) throw VoiceException(self::ERROR_NO_AUDIO_FILE);
+		$type = $this->validContentTypes[ $src['type'] ];
+		if( !$type ) throw new VoiceException(CommonMessages::get()->msg('NOT_AUDIO_FILE'),$src);
 		
-		$dirDst = FILE_DIR . "voices/" . $info->uploadTime->format('Y/m-d/');
+		$dirDst = VOICE_DIR . $info->uploadTime->format('Y/m-d/');
 		if( !file_exists($dirDst) ) mkdir( $dirDst, 0777, true );
 		$pathDst = $dirDst . $info->voiceid . ".mp3";
 		
 		copy( $pathSrc, $pathDst );
 		return $pathDst;
-	}
-	function load( VoiceInfo $info )
-	{
-		$path = FILE_DIR . "voices/" . $info->uploadTime->format('Y/m-d/') . $info->voiceid . ".mp3";
-		return file_get_contents( $path );
 	}
 }
 ?>

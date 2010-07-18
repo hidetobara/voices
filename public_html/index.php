@@ -7,6 +7,7 @@
 	<ul>
 		<li><a href='./session.php'>Login/Logout</a></li>
 		<li><a href='./upload.php'>Upload voice !</a></li>
+		<li><a href='./playlist.php'>Playlist</a></li>
 	</ul>
 </body>
 </html>

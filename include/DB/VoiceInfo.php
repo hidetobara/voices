@@ -12,13 +12,13 @@ class VoiceInfo
 	public $voiceid;
 	public $userid;
 	public $dst;
-	public $playedCount;
-	public $playble;
+	public $playable;
 	public $uploadTime;
 	
-	public $thumbnailid;
+	public $imageid;
 	public $title;
 	public $artist;
+	public $playedCount;
 	public $description;
 	public $tags;
 	
@@ -35,14 +35,14 @@ class VoiceInfo
 		if(is_numeric($p['voice_id'])) $this->voiceid = intval($p['voice_id']);
 		if(is_numeric($p['user_id'])) $this->userid = intval($p['user_id']);
 		if($p['dst']) $this->dst = $p['dst'];
-		if(is_numeric($p['played_count'])) $this->playedCount = intval($p['played_count']);
 		if(is_string($p['upload_time'])) $this->uploadTime = new DateTime($p['upload_time']);
 	}
 	function copyDetail( Array $p )
 	{
-		if(is_numeric($p['thumbnail_id'])) $this->thumbnailid = intval($p['thumbnail_id']);
+		if(is_numeric($p['image_id'])) $this->imageid = intval($p['image_id']);
 		if($p['title']) $this->title = htmlspecialchars($p['title']);
 		if($p['artist']) $this->artist = htmlspecialchars($p['artist']);
+		if(is_numeric($p['played_count'])) $this->playedCount = intval($p['played_count']);
 		if($p['description']) $this->description = htmlspecialchars($p['description']);
 		if(is_string($p['tags']))
 		{
@@ -114,10 +114,10 @@ class VoiceInfoDB extends BaseDB
 
 	function updateDetail( VoiceInfo $info )
 	{
-		$sql = sprintf( "UPDATE %s SET `thumbnail_id`=:tid,`title`=:title,`artist`=:art,`description`=:desc,`tags`=:tags WHERE `voice_id`=:vid",
+		$sql = sprintf( "UPDATE %s SET `image_id`=:imageid,`title`=:title,`artist`=:art,`description`=:desc,`tags`=:tags WHERE `voice_id`=:vid",
 			self::TABLE_DETAIL );
 		$params = array(
-			':tid' => $info->thumbnailid ? $info->thumbnailid : 0,
+			':imageid' => $info->imageid ? $info->imageid : 0,
 			':title' => $info->title,
 			':art' => $info->artist,
 			':desc' => $info->description,

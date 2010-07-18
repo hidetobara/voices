@@ -12,8 +12,8 @@
 	</form>
 {else}
 	try login.<br/>
-	{if $message}
-		{$message}<br/>
+	{if $error}
+		{$error}<br/>
 	{/if}
 	<form action='{$HOME_URL}session.php' METHOD='POST'>
 		<input type='hidden' name='command' value='login'/>
@@ -24,5 +24,6 @@
 
 {/if}
 
+{include file='web/_footer.tpl'}
 </body>
 </html>

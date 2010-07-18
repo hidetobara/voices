@@ -2,17 +2,19 @@
 require_once( SMARTY_DIR . 'Smarty.class.php' );
 require_once( 'Log.php' );
 require_once( INCLUDE_DIR . 'VoiceException.php' );
+require_once( INCLUDE_DIR . "web/LoginSession.php" );
+require_once( INCLUDE_DIR . "web/CommonMessages.php" );
 
 
 class BaseWeb
 {
-	protected $userid = 1;	
+	protected $userid;
 	
 	protected $assigned;
-	protected $module;
+	protected $templateGroup;
 	protected $name;
 	protected $template;
-
+	
 	function __construct( $opt=null )
 	{
 		$this->assigned = array();
@@ -20,15 +22,14 @@ class BaseWeb
 		$this->assignHash( array(
 			'HOME_URL' => HOME_URL,
 			'ENV_TYPE' => ENV_TYPE,
-			'API_URL' => API_URL,
-			) );
+			'API_URL' => API_URL ) );
 			
-		$this->module = 'web';
+		$this->templateGroup = 'web';
 		$this->name = 'default';
 		$this->template = 'error.tpl';
 	}
 	
-	function setModule( $module ){		$this->module = $module;		}
+	function setGroup( $group ){		$this->templateGroup = $group;		}
 	function setTemplate( $tpl ){		$this->template = $tpl;		}
 	
 	function assign( $key, $item ){		$this->assigned[ $key ] = $item;		}
@@ -52,6 +53,14 @@ class BaseWeb
 		$this->finalize();
 	}
 	
+	protected function checkSession()
+	{
+		$userid = (int)LoginSession::get()->check();
+		if( !$userid ) throw new VoiceException(CommonMessages::get()->msg('NO_SESSION'));
+
+		$this->userid = $userid;
+	}
+	
 	protected function initialize()
 	{
 	}
@@ -64,13 +73,13 @@ class BaseWeb
 	{
 		$smarty = new Smarty();
 		
-		$smarty->template_dir = SMARTY_WORK_DIR . 'templates/';
+		$smarty->template_dir = SMARTY_TEMPLATE_DIR;
 		$smarty->compile_dir  = SMARTY_WORK_DIR . 'templates_c/';
 		$smarty->cache_dir    = SMARTY_WORK_DIR . 'cache/';
-		
+		$smarty->plugins_dir[] = SMARTY_TEMPLATE_DIR . 'plugins/';
 		$smarty->assign( $this->assigned );
 		
-		$path = SMARTY_TEMPLATE_DIR . $this->module . '/' . $this->template;
+		$path = SMARTY_TEMPLATE_DIR . $this->templateGroup . '/' . $this->template;
 		if( file_exists($path) ) $smarty->display( $path );
 	}
 	

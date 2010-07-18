@@ -1,14 +1,13 @@
 <?php
 require_once( "../configure.php" );
-require_once( INCLUDE_DIR . "web/BaseWeb.php" );
+require_once( INCLUDE_DIR . "VoiceException.php" );
+require_once( INCLUDE_DIR . "web/LoginSession.php" );
 require_once( INCLUDE_DIR . "DB/VoiceInfo.php" );
 
-class DownloadException extends Exception
-{
-}
 
-class Download
+class DownloadVoice
 {
+	const ERROR_NO_SESSION = 'No session !';
 	const ERROR_NO_VOICE_INFO = 'No voice info !';
 	const ERROR_NO_FILE = 'No file !';
 	
@@ -37,19 +36,21 @@ class Download
 	
 	function initialize()
 	{
-		if( $_REQUEST['vid'] ) $this->vInfo = $this->vDB->getInfo( $_REQUEST['vid'] );
-		if( !$this->vInfo ) throw new DownloadException(self::ERROR_NO_VOICE_INFO);
+		if( !LoginSession::get()->check() ) throw new VoiceException(self::ERROR_NO_SESSION);
+		
+		if( $_REQUEST['id'] ) $this->vInfo = $this->vDB->getInfo( $_REQUEST['id'] );
+		if( !$this->vInfo ) throw new VoiceException(self::ERROR_NO_VOICE_INFO);
 	}
 	function handle()
 	{
 		$path = $this->vInfo->dst;
-		if( !file_exists($path) ) throw new DownloadException(self::ERROR_NO_FILE);
+		if( !file_exists($path) ) throw new VoiceException(self::ERROR_NO_FILE);
 		
 		header('Content-type: audio/mpeg');
 		header('Content-Length: ' . filesize($path));
 		readfile($path);
 	}
 }
-$instance = new Download();
+$instance = new DownloadVoice();
 $instance->run();
 ?>

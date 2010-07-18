@@ -15,7 +15,7 @@
 		title: <input type="text" name="title" value="{$upinfo->title}"/><br/>
 		artist: <input type="text" name="artist" value="{$upinfo->artist}"/><br/>
 		description: <input type="text" name="description" value="{$upinfo->description}"/><br/>
-		image: <input type="file" name="thumbnail_file"/><br/>
+		image: <input type="file" name="image_file"/><br/>
 		voice: <input type="file" name="voice_file"/><br/>
 		<input type="submit" value="Confirm"/>
 	</form>

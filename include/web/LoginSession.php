@@ -1,13 +1,13 @@
 <?php
 require_once( INCLUDE_DIR . "DB/TempKey.php" );
 
-class SessionInfo
+class LoginSession
 {
 	static protected $Instance;
 	static function get()
 	{
-		if( !SessionInfo::$Instance ) SessionInfo::$Instance = new SessionInfo();
-		return SessionInfo::$Instance;
+		if( !LoginSession::$Instance ) LoginSession::$Instance = new LoginSession();
+		return LoginSession::$Instance;
 	}
 	
 	const SESSION_NAME = 'voice_session';
@@ -32,12 +32,12 @@ class SessionInfo
 	{
 		$this->tempKey = new TempKey( array('user_id'=>$userid) );
 		$this->tempKeyDB->updateTempKey( $this->tempKey );
-		
+
 		switch($this->mode)
 		{
 		case self::MODE_COOKIE:
 			$timeout = time() + 7 * 86400;
-			setcookie( self::SESSION_USERID, $this->tempKey->userId, $timeout, $this->getHostPath(), $this->getHost() );
+			$out = setcookie( self::SESSION_USERID, $this->tempKey->userId, $timeout, $this->getHostPath(), $this->getHost() );
 			setcookie( self::SESSION_NAME, $this->tempKey->tempKey, $timeout, $this->getHostPath(), $this->getHost() );
 			break;
 		}
@@ -50,7 +50,6 @@ class SessionInfo
 			setcookie( self::SESSION_NAME, '', 0, $this->getHostPath(), $this->getHost() );
 			break;
 		}
-		
 	}
 	function check()
 	{
@@ -62,6 +61,12 @@ class SessionInfo
 			$this->tempKey = new TempKey( array('user_id'=>$userid,'temp_key'=>$key) );
 			if( $this->tempKeyDB->authorizeTempKey( $this->tempKey ) ) return $userid;
 			break;
+			
+		default:
+			$key = $_REQUEST[ 'temp_key' ];
+			$userid = $_REQUEST[ 'user_id' ];
+			$this->tempKey = new TempKey( array('user_id'=>$userid,'temp_key'=>$key) );
+			if( $this->tempKeyDB->authorizeTempKey( $this->tempKey ) ) return $userid;
 		}
 		return null;
 	}
