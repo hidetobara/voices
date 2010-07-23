@@ -53,21 +53,20 @@ class LoginSession
 	}
 	function check()
 	{
-		switch($this->mode)
+		if( self::MODE_COOKIE )
 		{
-		case self::MODE_COOKIE:
 			$key = $_COOKIE[ self::SESSION_NAME ];
 			$userid = $_COOKIE[ self::SESSION_USERID ];
-			$this->tempKey = new TempKey( array('user_id'=>$userid,'temp_key'=>$key) );
-			if( $this->tempKeyDB->authorizeTempKey( $this->tempKey ) ) return $userid;
-			break;
-			
-		default:
-			$key = $_REQUEST[ 'temp_key' ];
-			$userid = $_REQUEST[ 'user_id' ];
-			$this->tempKey = new TempKey( array('user_id'=>$userid,'temp_key'=>$key) );
-			if( $this->tempKeyDB->authorizeTempKey( $this->tempKey ) ) return $userid;
 		}
+
+		if( !$key ) $key = $_REQUEST[ 'temp_key' ];
+		if( !$userid ) $userid = $_REQUEST[ 'user_id' ];
+		
+		if( $key && $userid )
+		{
+			$this->tempKey = new TempKey( array('user_id'=>$userid,'temp_key'=>$key) );
+			if( $this->tempKeyDB->authorizeTempKey( $this->tempKey ) ) return $userid;
+		}		
 		return null;
 	}
 	
