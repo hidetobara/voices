@@ -56,7 +56,7 @@ class UserInfo
 
 class UserDB extends BaseDB
 {
-	const TABLE_NAME = 'users';
+	const TABLE_NAME = 'voices_users';
 	
 	function setUser( UserInfo $rec )
 	{
@@ -89,7 +89,8 @@ class UserDB extends BaseDB
 	
 	function authorizeUser( UserInfo $rec )
 	{
-		$sql = "SELECT * FROM `users` WHERE username LIKE :username AND password_md5 LIKE :passmd5";
+		$sql = sprintf( "SELECT * FROM `%s` WHERE username LIKE :username AND password_md5 LIKE :passmd5",
+			self::TABLE_NAME );
 		$state = $this->pdo->prepare( $sql );
 		$state->execute(
 			array( ':username' => $rec->username, ':passmd5' => $rec->passwordMd5 )
@@ -97,7 +98,8 @@ class UserDB extends BaseDB
 		$hash = $state->fetch(PDO::FETCH_ASSOC);
 		if( !$hash ) return null;
 		
-		$sql = "UPDATE `users` SET login_time = NOW() WHERE user_id = :userId";
+		$sql = sprintf( "UPDATE `%s` SET login_time = NOW() WHERE user_id = :userId",
+			self::TABLE_NAME );
 		$state = $this->pdo->prepare( $sql );
 		$state->execute(
 			array( ':userId' => $rec->userId )
@@ -108,7 +110,8 @@ class UserDB extends BaseDB
 
 	function getUser( UserInfo $rec )
 	{
-		$sql = "SELECT * FROM `users` WHERE";
+		$sql = sprintf( "SELECT * FROM `%s` WHERE",
+			self::TABLE_NAME );
 		if( $rec->userId )
 		{
 			$sql .= " user_id = :userId";

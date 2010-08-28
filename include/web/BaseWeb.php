@@ -60,6 +60,10 @@ class BaseWeb
 
 		$this->userid = $userid;
 	}
+	protected function assignSession()
+	{
+		$this->assignHash( LoginSession::get()->getSessionArray() );
+	}
 	
 	protected function initialize()
 	{
@@ -87,5 +91,4 @@ class BaseWeb
 	{
 	}
 }
-
 ?>

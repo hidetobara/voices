@@ -10,8 +10,8 @@ class LoginSession
 		return LoginSession::$Instance;
 	}
 	
-	const SESSION_NAME = 'voice_session';
-	const SESSION_USERID = 'voice_userid';
+	const SESSION_KEY = 'session_key';
+	const SESSION_USERID = 'session_userid';
 	
 	protected $tempKeyDB;
 	protected $tempKey;
@@ -37,8 +37,8 @@ class LoginSession
 		{
 		case self::MODE_COOKIE:
 			$timeout = time() + 7 * 86400;
-			$out = setcookie( self::SESSION_USERID, $this->tempKey->userId, $timeout, $this->getHostPath(), $this->getHost() );
-			setcookie( self::SESSION_NAME, $this->tempKey->tempKey, $timeout, $this->getHostPath(), $this->getHost() );
+			setcookie( self::SESSION_USERID, $this->tempKey->userId, $timeout, $this->getHostPath(), $this->getHost() );
+			setcookie( self::SESSION_KEY, $this->tempKey->tempKey, $timeout, $this->getHostPath(), $this->getHost() );
 			break;
 		}
 	}
@@ -47,27 +47,39 @@ class LoginSession
 		switch($this->mode)
 		{
 		case self::MODE_COOKIE:
-			setcookie( self::SESSION_NAME, '', 0, $this->getHostPath(), $this->getHost() );
+			setcookie( self::SESSION_KEY, '', 0, $this->getHostPath(), $this->getHost() );
 			break;
 		}
 	}
+	
+	function getTempKey()
+	{
+		$key = $_REQUEST[ self::SESSION_KEY ];
+		$userid = $_REQUEST[ self::SESSION_USERID ];
+		
+		if( $key && $userid ) return new TempKey( array('user_id'=>$userid,'temp_key'=>$key) );
+		
+		return null;
+	}
+	
 	function check()
 	{
-		if( self::MODE_COOKIE )
-		{
-			$key = $_COOKIE[ self::SESSION_NAME ];
-			$userid = $_COOKIE[ self::SESSION_USERID ];
-		}
-
-		if( !$key ) $key = $_REQUEST[ 'temp_key' ];
-		if( !$userid ) $userid = $_REQUEST[ 'user_id' ];
-		
-		if( $key && $userid )
-		{
-			$this->tempKey = new TempKey( array('user_id'=>$userid,'temp_key'=>$key) );
-			if( $this->tempKeyDB->authorizeTempKey( $this->tempKey ) ) return $userid;
-		}		
+		$this->tempKey = $this->getTempKey();
+		if( $this->tempKey && $this->tempKeyDB->authorizeTempKey( $this->tempKey ) ) return $this->tempKey->userId;
+				
 		return null;
+	}
+	
+	function getSessionArray()
+	{
+		$tempKey = $this->getTempKey();
+		if( !$tempKey ) return null;
+		
+		return array(
+			self::SESSION_USERID => $tempKey->userId,
+			self::SESSION_KEY => $tempKey->tempKey,
+			'session_urlparam' => sprintf("session_userid=%d&session_key=%s", $tempKey->userId, $tempKey->tempKey)
+			);
 	}
 	
 	protected function isCookieEnable()

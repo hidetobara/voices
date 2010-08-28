@@ -24,15 +24,16 @@ class CommonMessages
 
 		$this->messages = array();
 		
-		$path = DATA_DIR . 'messages/common.csv';
+		$path = CONF_DIR . 'messages/common.csv';
 		$fin = fopen( $path, 'r' );
 		while( $line = fgets($fin) )
 		{
 			$line = rtrim( $line );
+			if( $line[0] == "#" ) continue;
 			$cells = mb_split( ';', $line );
 			if( count($cells) <= 1 ) continue;
 			
-			$key = $cells[0];
+			$key = trim($cells[0]);
 			$value = $cells[$col];
 			if( !$value ) continue;
 			
@@ -44,7 +45,7 @@ class CommonMessages
 	function msg( $key )
 	{
 		$value = $this->messages[ $key ];
-		return $value ? $value : '...';
+		return $value ? $value : $key;
 	}
 }
 ?>

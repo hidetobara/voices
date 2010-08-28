@@ -2,15 +2,25 @@
 	_array
 *****}
 
+<table style='border-width: 0'>
 {foreach from=$_array item=play}
-	<div style='text-align: left'>
-		<img src="" height="32" width="32"/>
-		<a href="{$HOME_URL}voicelist.php?playlist_id={$play->playlistid}">{$play->title}</a><br/>
-	</div>
-	<div style='text-align: right'>
-		<a href="{$HOME_URL}playlist.php?command=edit&amp;playlist_id={$play->playlistid}">Edit.</a><br/>
-	</div>
-	<hr width="80%"/>
+	<tr>
+		<td style='text-align: left'>
+			<a href="{$HOME_URL}jplayer.php?playlist_id={$play->playlistid}">
+				{image_link _playlist_info=$play size="icon"}
+				Play
+			</a><br/>
+			Title: {$play->title}
+		</td>
+		<td style='text-align: right'>
+			<a href="{$HOME_URL}medialist.php?playlist_id={$play->playlistid}">View List.</a><br/>
+			<a href="{$HOME_URL}playlist.php?command=edit&amp;playlist_id={$play->playlistid}">Edit.</a><br/>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><hr width="100%"/></td>
+	</tr>
 {foreachelse}
-	no playlists.<br/>
+	<tr><td>No playlists.</td></tr>
 {/foreach}
+</table>

@@ -8,8 +8,8 @@ class PlaylistInfo
 	public $playlistid;
 	public $userid;
 	public $title;
-	public $voiceids;
-	public $thumbnailid;
+	public $mediaids;
+	public $imageid;
 	
 	function __construct( $p=null )
 	{
@@ -20,27 +20,38 @@ class PlaylistInfo
 		if( is_numeric($p['playlist_id']) ) $this->playlistid = (int)$p['playlist_id'];
 		if( is_numeric($p['user_id']) ) $this->userid = (int)$p['user_id'];
 		if( is_string($p['title']) ) $this->title = $p['title'];
-		if( $p['voice_ids'] && is_string($p['voice_ids']) ) $this->voiceids = mb_split(';',$p['voice_ids']);
-		if( is_array($p['voice_ids_array']) ) $this->voiceids = $p['voice_ids_array'];
-		if( is_numeric($p['thumbnail_id']) ) $this->thumbnailid = (int)$p['thumbnail_id'];
+		if( $p['media_ids'] && is_string($p['media_ids']) ) $this->mediaids = mb_split(';',$p['media_ids']);
+		if( is_array($p['media_ids_array']) ) $this->voiceids = $p['media_ids_array'];
+		if( is_numeric($p['image_id']) ) $this->imageid = (int)$p['image_id'];
 		
-		if( count($this->voiceids) >= self::VOICE_MAX ) $this->voiceids = array_slice( $this->voiceids, 0, self::VOICE_MAX );
+		if( is_array($this->mediaids) ) $this->mediaids = array_slice( $this->mediaids, 0, self::VOICE_MAX );
+	}
+	
+	function getMediaId( $index )
+	{
+		if( !is_array($this->mediaids) ) return null;
+		return $this->mediaids[ $index ];
+	}
+	function addMediaId( $vid )
+	{
+		if( is_numeric($vid) ) $vid = "v" . $vid;
+		$this->mediaids[] = $vid;
 	}
 }
 
 class PlaylistInfoDB extends BaseDB
 {
-	const TABLE_INFO = 'playlist_info';
+	const TABLE_INFO = 'voices_playlist_info';
 	
 	function newInfo( PlaylistInfo $info )
 	{
-		$sql = sprintf( "INSERT INTO %s (`user_id`,`title`,`voice_ids`,`thumbnail_id`)"
-			. " VALUES(:userid,:title,:vids,:thumbid)", self::TABLE_INFO );
+		$sql = sprintf( "INSERT INTO %s (`user_id`,`title`,`media_ids`,`image_id`)"
+			. " VALUES(:userid,:title,:vids,:imageid)", self::TABLE_INFO );
 		$params = array(
 			':userid' => $info->userid,
 			':title' => $info->title,
-			':vids' => is_array($info->voiceids) ? implode(',',$info->voiceids) : "",
-			':thumbid' => $info->thumbnailid );
+			':vids' => is_array($info->mediaids) ? implode(',',$info->mediaids) : "",
+			':imageid' => $info->imageid );
 		$state = $this->pdo->prepare( $sql );
 		if( !$state->execute( $params ) ) return null;
 		
@@ -57,12 +68,12 @@ class PlaylistInfoDB extends BaseDB
 	
 	function updateInfo( PlaylistInfo $info )
 	{
-		$sql = sprintf( "UPDATE %s SET `title`=:title, `voice_ids`=:vids, `thumbnail_id`=:thumbid"
+		$sql = sprintf( "UPDATE %s SET `title`=:title, `media_ids`=:vids, `image_id`=:imageid"
 			. " WHERE `playlist_id`=:pid", self::TABLE_INFO );
 		$params = array(
 			':title' => $info->title,
-			':vids' => is_array($info->voiceids) ? implode(';',$info->voiceids) : "",
-			':thumbid' => $info->thumbnailid,
+			':vids' => is_array($info->mediaids) ? implode(';',$info->mediaids) : "",
+			':imageid' => $info->imageid,
 			':pid' => $info->playlistid );
 		$state = $this->pdo->prepare( $sql );
 		return $state->execute( $params );
@@ -77,6 +88,7 @@ class PlaylistInfoDB extends BaseDB
 		if( !$state->execute( $params ) ) return null;
 		
 		$hash = $state->fetch( PDO::FETCH_ASSOC );
+		if( !$hash ) return null;
 		return new PlaylistInfo( $hash );
 	}
 	

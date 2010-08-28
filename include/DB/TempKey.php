@@ -49,11 +49,14 @@ class TempKey
 
 class TempKeyDB extends BaseDB
 {
+	const TABLE_NAME = 'voices_temp_key';
+	
 	function updateTempKey( TempKey $rec )
 	{
 		if( !$rec->userId ) return false;
 	
-		$sql = "UPDATE `temp_key` SET `temp_key`=:tempKey, `update_date`=NOW() WHERE `user_id`=:userId";
+		$sql = sprintf( "UPDATE `%s` SET `temp_key`=:tempKey, `update_date`=NOW() WHERE `user_id`=:userId",
+			self::TABLE_NAME );
 		$state = $this->pdo->prepare( $sql );
 		$state->execute(
 			array( ':userId' => $rec->userId, ':tempKey' => $rec->tempKey )
@@ -61,7 +64,8 @@ class TempKeyDB extends BaseDB
 
 		if( $state->rowCount() == 0 )
 		{
-			$sql = "INSERT INTO `temp_key` (user_id,temp_key,update_date) VALUES(:userId,:tempKey,NOW())";
+			$sql = sprintf( "INSERT INTO `%s` (user_id,temp_key,update_date) VALUES(:userId,:tempKey,NOW())",
+				self::TABLE_NAME );
 			$state = $this->pdo->prepare( $sql );
 			$state->execute(
 				array( ':userId' => $rec->userId, ':tempKey' => $rec->tempKey )
@@ -74,7 +78,8 @@ class TempKeyDB extends BaseDB
 	{
 		if( !$rec->userId ) return null;
 		
-		$sql = "SELECT * FROM `temp_key` WHERE `user_id` LIKE :userId AND `temp_key` LIKE :tempKey";
+		$sql = sprintf( "SELECT * FROM `%s` WHERE `user_id` LIKE :userId AND `temp_key` LIKE :tempKey",
+			self::TABLE_NAME );
 		$state = $this->pdo->prepare( $sql );
 		$state->execute(
 			array( ':userId' => $rec->userId, ':tempKey' => $rec->tempKey )

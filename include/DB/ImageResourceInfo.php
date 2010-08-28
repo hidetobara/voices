@@ -41,7 +41,7 @@ class ImageResourceInfo
 
 class ImageResourceInfoDB extends BaseDB
 {
-	const TABLE_INFO = 'image_resource_info';
+	const TABLE_INFO = 'voices_image_resource_info';
 	
 	function newInfo( ImageResourceInfo $info )
 	{

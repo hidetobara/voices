@@ -24,7 +24,7 @@ class ImageInfo
 
 class ImageInfoDB extends BaseDB
 {
-	const TABLE_INFO = 'image_info';
+	const TABLE_INFO = 'voices_image_info';
 	
 	function newInfo( $userid )
 	{

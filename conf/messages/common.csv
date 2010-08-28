@@ -1,0 +1,17 @@
+﻿#Paramter,English,Japanese
+INVALID_PARAMETER;Invalid parameter!;不正なパラメータです。
+UNKNOWN;Unknown error !;予期しないエラーが起こりました。
+
+LOGIN_ERROR;Login error !;ログインできません。
+NO_SESSION;No session !;セッションがありません。
+
+NO_FILE;No file exists !;ファイルがありません。
+
+NO_PLAYLIST_INFO;No playlist !;プレイリストがありません。
+
+NOT_AUDIO_FILE;This file is not audio file.;音声ファイルではありません。
+NO_VOICE_INFO;No voice info.;音声情報がありません。
+VOICE_FILE_MAX_OVER;This file is too big.;ファイルサイズが大きすぎます。
+
+NOT_IMAGE_FILE;This file is not image.;画像ファイルではありません。
+NO_IMAGE_INFO;No voice info.;画像情報がありません。

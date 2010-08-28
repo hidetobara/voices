@@ -6,7 +6,7 @@ require_once( INCLUDE_DIR . "File/ImageFile.php" );
 
 
 class UploadWeb extends BaseWeb
-{	
+{
 	public $mode;
 
 	public $voiceFile;
@@ -52,6 +52,11 @@ class UploadWeb extends BaseWeb
 	
 	function uploadVoice( $vfile, $ifile )
 	{
+		if( $vfile['size'] > VOICE_SIZE_MAX_MB * 1024 * 1024 )
+		{
+			throw new VoiceException(CommonMessages::get()->msg('VOICE_SIZE_MAX_MB'));
+		}
+		
 		$vinfo = new VoiceInfo( $_REQUEST );
 		$this->assign( 'upinfo', $vinfo );
 		try
@@ -65,18 +70,18 @@ class UploadWeb extends BaseWeb
 			throw $ex;
 		}
 
+		$vinfo = $this->voiceDb->newInfo( $this->userid );
+		$vinfo->copyDetail( $_REQUEST );
+		$dst = $this->voiceFile->save( $vfile, $vinfo );
+		
 		if( $ifile )
 		{
 			$iinfo = $this->imageDb->newInfo( $this->userid );
 			$this->imageFile->save( $ifile, $iinfo );
+			$vinfo->imageid = $iinfo->imageid;
 		}
-		
-		$vinfo = $this->voiceDb->newInfo( $this->userid );
-		$vinfo->copyDetail( $_REQUEST );
-		
-		$dst = $this->voiceFile->save( $vfile, $vinfo );
+				
 		$vinfo->dst = $dst;
-		if( $iinfo ) $vinfo->imageid = $iinfo->imageid;
 		$this->voiceDb->updateInfo( $vinfo );
 		$this->voiceDb->updateDetail( $vinfo );
 	}
