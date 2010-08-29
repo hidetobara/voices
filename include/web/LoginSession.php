@@ -12,6 +12,7 @@ class LoginSession
 	
 	const SESSION_KEY = 'session_key';
 	const SESSION_USERID = 'session_userid';
+	const SESSION_EXPIRE_DAY = 3;
 	
 	protected $tempKeyDB;
 	protected $tempKey;
@@ -36,23 +37,29 @@ class LoginSession
 		switch($this->mode)
 		{
 		case self::MODE_COOKIE:
-			$timeout = time() + 7 * 86400;
-			setcookie( self::SESSION_USERID, $this->tempKey->userId, $timeout, $this->getHostPath(), $this->getHost() );
-			setcookie( self::SESSION_KEY, $this->tempKey->tempKey, $timeout, $this->getHostPath(), $this->getHost() );
+			$this->updateCookie( $this->tempKey, $this->expireTime() );
 			break;
 		}
 	}
+	
 	function clear()
 	{
 		switch($this->mode)
 		{
 		case self::MODE_COOKIE:
-			setcookie( self::SESSION_KEY, '', 0, $this->getHostPath(), $this->getHost() );
+			$this->updateCookie( new TempKey(), 0 );
 			break;
 		}
 	}
 	
-	function getTempKey()
+	protected function updateCookie( TempKey $key, $timeout )
+	{
+		setcookie( self::SESSION_USERID, $key->userId, $timeout, $this->getHostPath(), $this->getHost() );
+		setcookie( self::SESSION_KEY, $key->tempKey, $timeout, $this->getHostPath(), $this->getHost() );
+	}
+	
+	
+	protected function getTempKey()
 	{
 		$key = $_REQUEST[ self::SESSION_KEY ];
 		$userid = $_REQUEST[ self::SESSION_USERID ];
@@ -65,7 +72,11 @@ class LoginSession
 	function check()
 	{
 		$this->tempKey = $this->getTempKey();
-		if( $this->tempKey && $this->tempKeyDB->authorizeTempKey( $this->tempKey ) ) return $this->tempKey->userId;
+		if( $this->tempKey && $this->tempKeyDB->authorizeTempKey( $this->tempKey ) )
+		{
+			$this->updateCookie( $this->tempKey, $this->expireTime() );
+			return $this->tempKey->userId;
+		}
 				
 		return null;
 	}
@@ -97,6 +108,10 @@ class LoginSession
 	{
 		$cells = parse_url( HOME_URL );
 		return $cells['path'];
+	}
+	protected function expireTime()
+	{
+		return time() + self::SESSION_EXPIRE_DAY * 86400;
 	}
 }
 ?>

@@ -24,7 +24,7 @@
 	</tr>
 	<tr>
 	<td colspan='2'>
-		<hr width="80%"/>
+		<hr width="100%"/>
 	</td>
 	</tr>
 {foreachelse}

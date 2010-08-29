@@ -7,8 +7,12 @@
 {$error}
 
 {if !$mode}
-	Title: {$playlist_info->title}<br/>
+<div align="center">
+	<div>Title: {$playlist_info->title}</div>
+	<br />
+	
 	{include file='web/_medialist_array.tpl' _array=$media_array}
+</div>
 {/if}
 
 {include file='web/_footer.tpl'}

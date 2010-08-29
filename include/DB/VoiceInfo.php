@@ -53,8 +53,8 @@ class VoiceInfo extends MediaInfo
 	function copyDetail( Array $p )
 	{
 		if(is_numeric($p['image_id'])) $this->imageid = intval($p['image_id']);
-		if($p['title']) $this->title = htmlspecialchars($p['title']);
-		if($p['artist']) $this->artist = htmlspecialchars($p['artist']);
+		if($p['title']) $this->title = strip_tags($p['title']);
+		if($p['artist']) $this->artist = strip_tags($p['artist']);
 		if(is_numeric($p['played_count'])) $this->playedCount = intval($p['played_count']);
 		if($p['description']) $this->description = htmlspecialchars($p['description']);
 		if(is_string($p['tags']))

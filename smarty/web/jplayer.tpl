@@ -53,43 +53,43 @@
 {/literal}
 </head> 
 <body> 
-	<div id="jquery_jplayer"></div>
-	<div align="center">
-		<table>
-			<tr>
-				<td colspan='2'>{image_link _media_info=$media_info size="wall"}<br/></td>
-			</tr>
-			<tr>
-				<td colspan='2'>
-					<span id="jplayer_play_time" class="jp-play-time"></span> /
-					<span id="jplayer_total_time" class="jp-total-time"></span>
-				</td>
-			</tr>
-			<tr>
-				<td colspan='2'>{$media_info->title}</td>
-			</tr>
-			<tr>
-				<td colspan='2'>{$media_info->artist}</td>
-			</tr>
-			<tr>
-				<td style="text-align: left">
-					<a href="#" id="jplayer_play" class="jp-play">play</a>
-					<a href="#" id="jplayer_pause" class="jp-pause">pause</a>
-				</td>
-				<td style="text-align: right">
-					<a href="#" id="jplayer_stop" class="jp-stop">stop</a>
-				</td>
-			</tr>
-			<tr>
-				<td colspan='2'><hr /></td>
-			</tr>
-			<tr>
-				<td colspan='2' style="text-align: right">
-					<a href="media_edit.php?mid={$media_info->mediaid}">&gt;&gt;&gt;Edit</a>
-				</td>
-			</tr>
-		</table>
-	</div>
+<div id="jquery_jplayer"></div>
+<div align="center">
+	<table>
+		<tr>
+			<td colspan='2'>{image_link _media_info=$media_info size="wall"}<br/></td>
+		</tr>
+		<tr>
+			<td colspan='2'>
+				<span id="jplayer_play_time" class="jp-play-time"></span> /
+				<span id="jplayer_total_time" class="jp-total-time"></span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'>{$media_info->title}</td>
+		</tr>
+		<tr>
+			<td colspan='2'>{$media_info->artist}</td>
+		</tr>
+		<tr>
+			<td style="text-align: left">
+				<a href="#" id="jplayer_play" class="jp-play">play</a>
+				<a href="#" id="jplayer_pause" class="jp-pause">pause</a>
+			</td>
+			<td style="text-align: right">
+				<a href="#" id="jplayer_stop" class="jp-stop">stop</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'><hr /></td>
+		</tr>
+		<tr>
+			<td colspan='2' style="text-align: right">
+				<a href="media_edit.php?mid={$media_info->mediaid}">&gt;&gt;&gt;Edit</a>
+			</td>
+		</tr>
+	</table>
+</div>
 
 </body> 
 </html>

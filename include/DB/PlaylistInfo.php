@@ -19,7 +19,7 @@ class PlaylistInfo
 	{
 		if( is_numeric($p['playlist_id']) ) $this->playlistid = (int)$p['playlist_id'];
 		if( is_numeric($p['user_id']) ) $this->userid = (int)$p['user_id'];
-		if( is_string($p['title']) ) $this->title = $p['title'];
+		if( is_string($p['title']) ) $this->title = strip_tags($p['title']);
 		if( $p['media_ids'] && is_string($p['media_ids']) ) $this->mediaids = mb_split(';',$p['media_ids']);
 		if( is_array($p['media_ids_array']) ) $this->voiceids = $p['media_ids_array'];
 		if( is_numeric($p['image_id']) ) $this->imageid = (int)$p['image_id'];

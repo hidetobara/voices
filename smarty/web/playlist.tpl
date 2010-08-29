@@ -8,22 +8,25 @@
 {$error}<br/>
 
 {if $mode=="all"}
+<div align="center">
 	{if $step == "new"}
-		You made playlist {$playlist_info->title}<br/>
+		You made playlist {$playlist_info->title}<br />
 	{/if}
 
 	{***** all *****}
-	All playlist<br/>
+	All playlist<br />
 	{include file="web/_playlist_array.tpl" _array=$playlist_array}
 	
 	{***** new *****}
-	New playlist<br/>
+	New playlist<br />
 	<form action="{$HOME_URL}playlist.php" method="POST">
-		<input type="hidden" name="command" value="new"/>
-		Title: <input type="text" name="title"/><br/>
-		IDs: <input type="text" name="media_ids"/><br/>
-		<input type="submit" value="NEW"/>
+		<input type="hidden" name="command" value="new" />
+		Title: <input type="text" name="title"/><br />
+		IDs: <input type="text" name="media_ids"/><br />
+		<input type="submit" value="NEW" />
 	</form>
+
+</div>
 
 {elseif $mode=="edit"}
 	Edit playlist<br/>

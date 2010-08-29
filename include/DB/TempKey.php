@@ -3,13 +3,11 @@ require_once( INCLUDE_DIR . "DB/BaseDB.php" );
 
 class TempKey
 {
-	const TEMP_VALID_SPAN = "+7 day";
-
 	public $userId;
 	public $tempKey;
 	public $updateDate;
 
-	public function __construct( $obj )
+	public function __construct( $obj=null )
 	{
 		if( $obj ) $this->copyRecord( $obj );
 	}
@@ -37,10 +35,12 @@ class TempKey
 		$this->tempKey = md5( $this->userId . ":" . time() . ":" . rand(0,1000) );
 	}
 	
-	public function isAlive()
+	public function isAlive( $aliveDay )
 	{
+		$alive = sprintf( "+%d day", $aliveDay );
+		
 		$deadline = new DateTime( $this->updateDate );
-		$deadline->modify( self::TEMP_VALID_SPAN );
+		$deadline->modify( $alive );
 		$now = new DateTime();
 		if( $deadline < $now ) return false;
 		return true;
