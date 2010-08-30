@@ -5,6 +5,8 @@ UNKNOWN;Unknown error !;予期しないエラーが起こりました。
 LOGIN_ERROR;Login error !;ログインできません。
 NO_SESSION;No session !;セッションがありません。
 
+NOT_UPLOAD;Can not upload !;アップロードできません。
+
 NO_FILE;No file exists !;ファイルがありません。
 
 NO_PLAYLIST_INFO;No playlist !;プレイリストがありません。
