@@ -13,10 +13,10 @@
 			<td colspan='2'>{image_link _media_info=$target_voice size="wall"}<br/></td>
 		</tr>
 		<tr>
-			<td colspan='2'>{$target_voice->title}</td>
+			<td colspan='2'>{$target_voice->title|escape}</td>
 		</tr>
 		<tr>
-			<td colspan='2'>{$target_voice->artist}</td>
+			<td colspan='2'>{$target_voice->artist|escape}</td>
 		</tr>
 		<tr>
 			<td colspan='2'>
@@ -27,13 +27,13 @@
 						<input type="hidden" name="mid" value="{$target_voice->mediaid}" />
 						<select name="playlist_id">
 						{foreach from=$playlist_array item=play}
-							<option value="{$play->playlistid}">{$play->title}</option>
+							<option value="{$play->playlistid}">{$play->title|escape}</option>
 						{/foreach}
 						</select>
 						<input type="submit" value="register" />
 					</form>
 				{elseif $mode == "registered_playlist"}
-					Add it into {$target_playlist->title}.<br />		
+					Add it into {$target_playlist->title|escape}.<br />
 				{/if}
 			</td>
 		</tr>

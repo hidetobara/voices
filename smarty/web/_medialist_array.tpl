@@ -9,8 +9,8 @@
 		<a href="{$HOME_URL}jplayer.php?mid={$voice->mediaid}">
 			{image_link _media_info=$voice size="icon"}
 			Play</a><br/>
-		Title: {$voice->title}<br/>
-		Artist: {$voice->artist}<br/>
+		Title: {$voice->title|escape}<br/>
+		Artist: {$voice->artist|escape}<br/>
 		Count: {$voice->playedCount}<br/>
 	</td>
 	<td style='text-align: right'>

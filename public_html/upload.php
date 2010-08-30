@@ -7,7 +7,7 @@ require_once( INCLUDE_DIR . "File/ImageFile.php" );
 
 class UploadWeb extends BaseWeb
 {
-	public $mode;
+	public $command;
 
 	public $voiceFile;
 	public $voiceDb;
@@ -32,18 +32,15 @@ class UploadWeb extends BaseWeb
 		$this->checkSession();
 		
 		//var_dump($_FILES);
-		$this->mode = $_REQUEST['mode'];
-		if( !$this->mode ) $this->mode = 'input';
-		$this->assign('mode',$this->mode);
+		$this->command = $_REQUEST['command'] ? $_REQUEST['command'] : 'input';
 	}
 	
 	function handle()
 	{
-		switch( $this->mode )
+		$this->assign( 'mode', 'input' );
+		
+		switch( $this->command )
 		{
-			case 'input':
-				$this->assign('next_mode','upload');
-				break;
 			case 'upload':
 				$this->uploadVoice( $_FILES['voice_file'], $_FILES['image_file'] );
 				break;
@@ -52,38 +49,29 @@ class UploadWeb extends BaseWeb
 	
 	function uploadVoice( $vfile, $ifile )
 	{
-		if( $vfile['size'] > VOICE_SIZE_MAX_MB * 1024 * 1024 )
-		{
-			throw new VoiceException(CommonMessages::get()->msg('VOICE_SIZE_MAX_MB'));
-		}
-		
 		$vinfo = new VoiceInfo( $_REQUEST );
 		$this->assign( 'upinfo', $vinfo );
-		try
-		{
-			$vinfo->checkDetail();
-		}
-		catch(Exception $ex)
-		{
-			$this->assign('mode','input');
-			$this->assign('next_mode','upload');
-			throw $ex;
-		}
+		$vinfo->checkDetail();
+		
+		if( $vfile['error'] ) throw new VoiceException(CommonMessages::get()->msg('NOT_UPLOAD'));
+		if( $vfile['size'] > VOICE_SIZE_MAX_MB * 1024 * 1024 ) throw new VoiceException(CommonMessages::get()->msg('VOICE_SIZE_MAX_MB'));
 
 		$vinfo = $this->voiceDb->newInfo( $this->userid );
 		$vinfo->copyDetail( $_REQUEST );
 		$dst = $this->voiceFile->save( $vfile, $vinfo );
-		
-		if( $ifile )
+
+		if( $ifile['size'] > 0 )
 		{
 			$iinfo = $this->imageDb->newInfo( $this->userid );
 			$this->imageFile->save( $ifile, $iinfo );
 			$vinfo->imageid = $iinfo->imageid;
 		}
-				
+
 		$vinfo->dst = $dst;
 		$this->voiceDb->updateInfo( $vinfo );
 		$this->voiceDb->updateDetail( $vinfo );
+		
+		$this->assign( 'mode', 'uploaded' );
 	}
 }
 $web = new UploadWeb();

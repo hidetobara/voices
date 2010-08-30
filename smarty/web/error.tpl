@@ -4,7 +4,7 @@
 	<title>Error</title>
 </head>
 <body>
-{$error}<br/>
+{$error|escape}<br/>
 
 {include file='web/_footer.tpl'}
 </body>

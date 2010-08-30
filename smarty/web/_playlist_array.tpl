@@ -10,7 +10,7 @@
 				{image_link _playlist_info=$play size="icon"}
 				Play
 			</a><br />
-			Title: {$play->title}<br />
+			Title: {$play->title|escape}<br />
 		</td>
 		<td style='text-align: right'>
 			<a href="{$HOME_URL}medialist.php?playlist_id={$play->playlistid}">&gt;&gt;&gt;View List</a><br/>

@@ -10,7 +10,7 @@
 {if $mode=="all"}
 <div align="center">
 	{if $step == "new"}
-		You made playlist {$playlist_info->title}<br />
+		You made playlist {$playlist_info->title|escape}<br />
 	{/if}
 
 	{***** all *****}
@@ -36,23 +36,23 @@
 		<form action="{$HOME_URL}playlist.php" method="POST" enctype="multipart/form-data"/>
 			<input type="hidden" name="command" value="update"/>
 			<input type="hidden" name="playlist_id" value="{$playlist_info->playlistid}"/>
-			Title: <input type="text" name="title" value="{$playlist_info->title}"/><br/>
+			Title: <input type="text" name="title" value="{$playlist_info->title|escape}"/><br/>
 			Image: <input type="file" name="image_file"/><br/>
 			<input type="submit" value="UPDATE"/>
 		</form><br/>
 		<form action="{$HOME_URL}playlist.php" method="POST">
 			<input type="hidden" name="command" value="delete"/>
 			<input type="hidden" name="playlist_id" value="{$playlist_info->playlistid}"/>
-			<input type="hidden" name="title" value="{$playlist_info->title}"/>
+			<input type="hidden" name="title" value="{$playlist_info->title|escape}"/>
 			<input type="submit" value="DELETE"/>
 		</form><br/>
 	{elseif $step == "updated"}
 		Update !<br/>
 		{image_link playlist_info=$playlist_info size="icon"}
-		Title: {$playlist_info->title}<br/>
+		Title: {$playlist_info->title|escape}<br/>
 	{elseif $step == "deleted"}
 		Deleted !<br/>
-		Title: {$playlist_info->title}<br/>
+		Title: {$playlist_info->title|escape}<br/>
 	{/if}
 
 {/if}

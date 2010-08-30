@@ -8,7 +8,7 @@
 
 {if !$mode}
 <div align="center">
-	<div>Title: {$playlist_info->title}</div>
+	<div>Title: {$playlist_info->title|escape}</div>
 	<br />
 	
 	{include file='web/_medialist_array.tpl' _array=$media_array}

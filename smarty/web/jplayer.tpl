@@ -66,10 +66,10 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan='2'>{$media_info->title}</td>
+			<td colspan='2'>{$media_info->title|escape}</td>
 		</tr>
 		<tr>
-			<td colspan='2'>{$media_info->artist}</td>
+			<td colspan='2'>{$media_info->artist|escape}</td>
 		</tr>
 		<tr>
 			<td style="text-align: left">
