@@ -29,5 +29,10 @@ class VoiceFile
 		copy( $pathSrc, $pathDst );
 		return $pathDst;
 	}
+	
+	function delete( VoiceInfo $info )
+	{
+		unlink( $info->dst );
+	}
 }
 ?>

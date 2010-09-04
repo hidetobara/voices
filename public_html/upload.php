@@ -47,19 +47,26 @@ class UploadWeb extends BaseWeb
 		}
 	}
 	
-	function uploadVoice( $vfile, $ifile )
+	protected function uploadVoice( $vfile, $ifile )
 	{
 		$vinfo = new VoiceInfo( $_REQUEST );
 		$this->assign( 'upinfo', $vinfo );
 		$vinfo->checkDetail();
 		
 		if( $vfile['error'] ) throw new VoiceException(CommonMessages::get()->msg('NOT_UPLOAD'));
-		if( $vfile['size'] > VOICE_SIZE_MAX_MB * 1024 * 1024 ) throw new VoiceException(CommonMessages::get()->msg('VOICE_SIZE_MAX_MB'));
+		if( $vfile['size'] > VOICE_SIZE_MAX_KB * 1024 ) throw new VoiceException(CommonMessages::get()->msg('VOICE_SIZE_MAX_MB'));
 
+		$infos = $this->voiceDb->getInfosByUser( $this->userid );
+		$amount = $vfile['size']/1024;
+		foreach( $infos as $info ) $amount += $info->sizeKb;
+		if( $amount > PERSONAL_SIZE_LIMIT_KB ) throw new VoiceException(CommonMessages::get()->msg('FILE_AMOUNT_MAX_OVER'));
+		
+		///// save voice
 		$vinfo = $this->voiceDb->newInfo( $this->userid );
 		$vinfo->copyDetail( $_REQUEST );
 		$dst = $this->voiceFile->save( $vfile, $vinfo );
 
+		///// save image
 		if( $ifile['size'] > 0 )
 		{
 			$iinfo = $this->imageDb->newInfo( $this->userid );
@@ -67,7 +74,9 @@ class UploadWeb extends BaseWeb
 			$vinfo->imageid = $iinfo->imageid;
 		}
 
+		///// update record
 		$vinfo->dst = $dst;
+		$vinfo->sizeKb = $vfile['size']/1024;
 		$this->voiceDb->updateInfo( $vinfo );
 		$this->voiceDb->updateDetail( $vinfo );
 		

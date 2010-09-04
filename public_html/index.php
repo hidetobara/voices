@@ -10,6 +10,7 @@
 	<div><a href='./session.php'>Login/Logout</a></div>
 	<div><a href='./upload.php'>Upload media !</a></div>
 	<div><a href='./playlist.php'>Playlist</a></div>
+	<div><a href='./uploadlist.php'>Uploadlist</a></div>
 </div>
 
 </body>

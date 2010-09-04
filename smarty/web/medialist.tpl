@@ -11,7 +11,7 @@
 	<div>Title: {$playlist_info->title|escape}</div>
 	<br />
 	
-	{include file='web/_medialist_array.tpl' _array=$media_array}
+	{include file='web/_media_array.tpl' _array=$media_array _is_medialist=true}
 </div>
 {/if}
 

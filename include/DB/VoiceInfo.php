@@ -18,6 +18,7 @@ class VoiceInfo extends MediaInfo
 	public $dst;
 	public $playable;
 	public $uploadTime;
+	public $sizeKb;
 	
 	///// Maybe change
 	//public $imageid;
@@ -49,6 +50,7 @@ class VoiceInfo extends MediaInfo
 		if(is_numeric($p['user_id'])) $this->userid = intval($p['user_id']);
 		if($p['dst']) $this->dst = $p['dst'];
 		if(is_string($p['upload_time'])) $this->uploadTime = new DateTime($p['upload_time']);
+		if(is_numeric($p['size_kb'])) $this->sizeKb = intval($p['size_kb']);
 	}
 	function copyDetail( Array $p )
 	{
@@ -134,10 +136,11 @@ class VoiceInfoDB extends BaseDB
 	
 	function updateInfo( VoiceInfo $info )
 	{	///// info
-		$sql = sprintf("UPDATE %s SET `dst`=:dst WHERE `voice_id`=:vid",
+		$sql = sprintf("UPDATE %s SET `dst`=:dst, `size_kb`=:size WHERE `voice_id`=:vid",
 			self::TABLE_INFO );
 		$params = array(
 			':dst' => $info->dst,
+			':size' => $info->sizeKb,
 			':vid' => $info->voiceid );
 		$state = $this->pdo->prepare( $sql );
 		if( !$state->execute( $params ) ) return false;
@@ -223,4 +226,39 @@ class VoiceInfoDB extends BaseDB
 		return $i;
 	}
 	
+	function getInfosByUser( $userid )
+	{
+		$params = array(
+			':userid' => $userid );
+		$sql = sprintf( "SELECT * FROM %s WHERE `user_id`=:userid",
+			self::TABLE_INFO );
+		$state = $this->pdo->prepare( $sql );
+		if( !$state->execute( $params ) ) return null;
+	
+		$infos = array();
+		while( true )
+		{
+			$hash = $state->fetch( PDO::FETCH_ASSOC );
+			if( !$hash ) break;
+			$infos[] = new VoiceInfo( $hash );
+		}
+		return $infos;
+	}
+	
+	function delete( VoiceInfo $i )
+	{
+		$params = array( ':vid' => $i->voiceid );
+		$tables = array(
+			self::TABLE_INFO,
+			self::TABLE_DETAIL,
+			self::TABLE_PLAYING );
+		foreach( $tables as $table )
+		{
+			$sql = sprintf( "DELETE FROM %s WHERE `voice_id`=:vid",
+				$table );
+			$state = $this->pdo->prepare( $sql );
+			if( !$state->execute( $params ) ) return false;
+		}
+		return true;
+	}
 }

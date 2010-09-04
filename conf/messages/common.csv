@@ -13,6 +13,7 @@ NO_PLAYLIST_INFO;No playlist !;プレイリストがありません。
 
 NOT_AUDIO_FILE;This file is not audio file.;音声ファイルではありません。
 NO_VOICE_INFO;No voice info.;音声情報がありません。
+FILE_AMOUNT_MAX_OVER;The size of uploaded files is over.;アップロードしたファイルの合計サイズが限界を越えています。
 VOICE_FILE_MAX_OVER;This file is too big.;ファイルサイズが大きすぎます。
 
 NOT_IMAGE_FILE;This file is not image.;画像ファイルではありません。
