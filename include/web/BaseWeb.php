@@ -1,6 +1,6 @@
 <?php
 require_once( SMARTY_DIR . 'Smarty.class.php' );
-require_once( 'Log.php' );
+require_once( INCLUDE_DIR . 'ext/Log.php' );
 require_once( INCLUDE_DIR . 'VoiceException.php' );
 require_once( INCLUDE_DIR . "web/LoginSession.php" );
 require_once( INCLUDE_DIR . "web/CommonMessages.php" );
@@ -21,6 +21,7 @@ class BaseWeb
 		
 		$this->assignHash( array(
 			'HOME_URL' => HOME_URL,
+			'SECURE_HOME_URL' => SECURE_HOME_URL,
 			'ENV_TYPE' => ENV_TYPE,
 			'API_URL' => API_URL ) );
 			

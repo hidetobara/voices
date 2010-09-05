@@ -6,7 +6,7 @@
 <body>
 {if $logined}
 	you are logined.<br/>
-	<form action='{$HOME_URL}session.php' METHOD='POST'>
+	<form action='{$SECURE_HOME_URL}session.php' METHOD='POST'>
 		<input type='hidden' name='command' value='logout'/>
 		<input type='submit' value='Logout'/>
 	</form>
@@ -15,7 +15,7 @@
 	{if $error}
 		{$error}<br/>
 	{/if}
-	<form action='{$HOME_URL}session.php' METHOD='POST'>
+	<form action='{$SECURE_HOME_URL}session.php' METHOD='POST'>
 		<input type='hidden' name='command' value='login'/>
 		username: <input type='text' name='username'/><br/>
 		password: <input type='password' name='password'/><br/>

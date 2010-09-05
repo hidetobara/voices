@@ -1,3 +1,4 @@
 <?php
+define( 'ENV_TYPE', 'DEV' );
 require_once( 'C:/Develop/xampp/htdocs/voices/conf/common.conf' );
 ?>
