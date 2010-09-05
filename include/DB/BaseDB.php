@@ -18,6 +18,7 @@ class BaseDB
 				DB_PASSWORD
 				);
 			$this->pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+			$this->pdo->query("SET NAMES utf8;");
 		}
 	}
 }
