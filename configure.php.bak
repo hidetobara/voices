@@ -1,0 +1,3 @@
+<?php
+require_once( 'C:/Develop/xampp/htdocs/voices/conf/common.conf' );
+?>

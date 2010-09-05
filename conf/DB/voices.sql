@@ -1,11 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 3.1.3.1
--- http://www.phpmyadmin.net
---
--- ホスト: localhost
--- 生成時間: 2010 年 8 月 29 日 03:07
--- サーバのバージョン: 5.1.33
--- PHP のバージョン: 5.2.9
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -15,15 +7,8 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- データベース: `voices`
---
 
--- --------------------------------------------------------
 
---
--- テーブルの構造 `voices_image_info`
---
 
 CREATE TABLE IF NOT EXISTS `voices_image_info` (
   `image_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -33,11 +18,7 @@ CREATE TABLE IF NOT EXISTS `voices_image_info` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- テーブルの構造 `voices_image_resource_info`
---
 
 CREATE TABLE IF NOT EXISTS `voices_image_resource_info` (
   `resource_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -49,11 +30,7 @@ CREATE TABLE IF NOT EXISTS `voices_image_resource_info` (
   KEY `thumbnail_id` (`image_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- テーブルの構造 `voices_playlist_info`
---
 
 CREATE TABLE IF NOT EXISTS `voices_playlist_info` (
   `playlist_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -65,11 +42,7 @@ CREATE TABLE IF NOT EXISTS `voices_playlist_info` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- テーブルの構造 `voices_temp_key`
---
 
 CREATE TABLE IF NOT EXISTS `voices_temp_key` (
   `user_id` int(11) NOT NULL,
@@ -78,11 +51,7 @@ CREATE TABLE IF NOT EXISTS `voices_temp_key` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- テーブルの構造 `voices_users`
---
 
 CREATE TABLE IF NOT EXISTS `voices_users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -95,11 +64,7 @@ CREATE TABLE IF NOT EXISTS `voices_users` (
   UNIQUE KEY `user_name` (`username`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- テーブルの構造 `voices_voice_detail`
---
 
 CREATE TABLE IF NOT EXISTS `voices_voice_detail` (
   `voice_id` int(11) NOT NULL,
@@ -111,11 +76,7 @@ CREATE TABLE IF NOT EXISTS `voices_voice_detail` (
   PRIMARY KEY (`voice_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- テーブルの構造 `voices_voice_info`
---
 
 CREATE TABLE IF NOT EXISTS `voices_voice_info` (
   `voice_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -123,15 +84,12 @@ CREATE TABLE IF NOT EXISTS `voices_voice_info` (
   `dst` char(128) NOT NULL,
   `voice_playable` int(11) DEFAULT NULL,
   `upload_time` datetime NOT NULL,
+  `size_kb` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`voice_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- テーブルの構造 `voices_voice_playing`
---
 
 CREATE TABLE IF NOT EXISTS `voices_voice_playing` (
   `voice_id` int(11) NOT NULL,
