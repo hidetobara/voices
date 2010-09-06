@@ -5,8 +5,9 @@ require_once( INCLUDE_DIR . "DB/VoiceInfo.php" );
 class MediaInfo
 {
 	public $type = null;
-	const MEDIA_VOICE = 1;
+	const MEDIA_VOICE = 'voice';
 	
+	public $isVisible = false;
 	public $mediaid;
 	public $imageid;
 	
@@ -19,6 +20,7 @@ class MediaInfo
 			$voiceDb = new VoiceInfoDB();
 			$info = $voiceDb->getInfo($id);
 			if( $info && $opt['detail'] ) $voiceDb->getDetail($info);
+			if( $info && $opt['playing']) $voiceDb->getPlaying($info);
 			return $info;
 		}
 		return false;

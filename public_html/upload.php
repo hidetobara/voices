@@ -30,6 +30,7 @@ class UploadWeb extends BaseWeb
 	function initialize()
 	{
 		$this->checkSession();
+		$this->assignSession();
 		
 		//var_dump($_FILES);
 		$this->command = $_REQUEST['command'] ? $_REQUEST['command'] : 'input';

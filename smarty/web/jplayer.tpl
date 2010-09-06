@@ -91,5 +91,6 @@
 	</table>
 </div>
 
+{include file='web/_footer.tpl'}
 </body> 
 </html>

@@ -10,7 +10,6 @@
 {elseif $mode == "input"}
 	<form action="{$HOME_URL}upload.php" method="POST" enctype="multipart/form-data"/>
 		<input type="hidden" name="command" value="upload"/>
-		<input type="hidden" name="user_id" value="1"/>
 		
 		title: <input type="text" name="title" value="{$upinfo->title|escape}"/><br/>
 		artist: <input type="text" name="artist" value="{$upinfo->artist|escape}"/><br/>

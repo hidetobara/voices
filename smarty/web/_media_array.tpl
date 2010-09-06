@@ -8,12 +8,16 @@
 {foreach from=$_array key=index item=voice}
 	<tr>
 	<td style='text-align: left'>
-		<a href="{$HOME_URL}jplayer.php?mid={$voice->mediaid}">
-			{image_link _media_info=$voice size="icon"}
-			Play</a><br/>
-		Title: {$voice->title|escape}<br/>
-		Artist: {$voice->artist|escape}<br/>
-		{if $voice->playedCount}Count: {$voice->playedCount}<br/>{/if}
+		{if !$voice->isVisible}
+			Don't play !
+		{elseif $voice->type == 'voice'}
+			<a href="{$HOME_URL}jplayer.php?mid={$voice->mediaid}">
+				{image_link _media_info=$voice size="icon"}
+				Play</a><br/>
+			Title: {$voice->title|escape}<br/>
+			Artist: {$voice->artist|escape}<br/>
+			{if $voice->playedCount}Count: {$voice->playedCount}<br/>{/if}
+		{/if}
 	</td>
 	{if $_is_medialist}
 	<td style='text-align: right'>
@@ -25,7 +29,7 @@
 		</form>
 	</td>
 	{/if}
-	{if $_is_uploadlist}
+	{if $_is_uploadlist && $voice->isVisible}
 	<td style='text-align: right'>
 		<form action="{$HOME_URL}uploadlist.php" method="post">
 			<input type='hidden' name='voice_id' value='{$voice->voiceid}'/>

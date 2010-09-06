@@ -13,7 +13,6 @@ class VoiceInfo extends MediaInfo
 	
 	///// No change
 	public $voiceid;
-	//public $mediaid;
 	public $userid;
 	public $dst;
 	public $playable;
@@ -21,7 +20,6 @@ class VoiceInfo extends MediaInfo
 	public $sizeKb;
 	
 	///// Maybe change
-	//public $imageid;
 	public $title;
 	public $artist;
 	public $description;
@@ -32,13 +30,14 @@ class VoiceInfo extends MediaInfo
 	
 	function __construct( $p=null )
 	{
-		$type = self::MEDIA_VOICE;
+		$this->type = self::MEDIA_VOICE;
 		
 		if( is_array($p) )
 		{
 			$this->copyInfo( $p );
 			$this->copyDetail( $p );
 			$this->copyPlaying( $p );
+			$this->isVisible = true;
 		}
 	}
 	function copyInfo( Array $p )
@@ -190,21 +189,21 @@ class VoiceInfoDB extends BaseDB
 		$sql = sprintf("SELECT * FROM %s WHERE `voice_id`=:vid LIMIT 1",
 			self::TABLE_INFO);
 		$state = $this->pdo->prepare( $sql );
-		if( !$state->execute( $params ) ) return null;
+		if( !$state->execute( $params ) ) return new VoiceInfo( array('voice_id'=>$id) );
 		
 		$info = $state->fetch( PDO::FETCH_ASSOC );
 		return new VoiceInfo( $info );		
 	}
 	function getDetail( VoiceInfo $i )
 	{
-		if( !$i->voiceid ) return null;
+		if( !$i->voiceid || !$i->isVisible ) return $i;
 		
 		$params = array(
 			':vid' => $i->voiceid );
 		$sql = sprintf("SELECT * FROM %s WHERE `voice_id`=:vid LIMIT 1",
 			self::TABLE_DETAIL);
 		$state = $this->pdo->prepare( $sql );
-		if( !$state->execute( $params ) ) return null;
+		if( !$state->execute( $params ) ) return $i;
 		
 		$detail = $state->fetch( PDO::FETCH_ASSOC );
 		$i->copyDetail( $detail );
@@ -212,14 +211,14 @@ class VoiceInfoDB extends BaseDB
 	}
 	function getPlaying( VoiceInfo $i )
 	{
-		if( !$i->voiceid ) return null;
-		
+		if( !$i->voiceid || !$i->isVisible ) return $i;
+	
 		$params = array(
 			':vid' => $i->voiceid );
 		$sql = sprintf("SELECT * FROM %s WHERE `voice_id`=:vid LIMIT 1",
 			self::TABLE_PLAYING);
 		$state = $this->pdo->prepare( $sql );
-		if( !$state->execute( $params ) ) return null;
+		if( !$state->execute( $params ) ) return $i;
 		
 		$array = $state->fetch( PDO::FETCH_ASSOC );
 		$i->copyPlaying( $array );
@@ -233,7 +232,7 @@ class VoiceInfoDB extends BaseDB
 		$sql = sprintf( "SELECT * FROM %s WHERE `user_id`=:userid",
 			self::TABLE_INFO );
 		$state = $this->pdo->prepare( $sql );
-		if( !$state->execute( $params ) ) return null;
+		if( !$state->execute( $params ) ) return array();
 	
 		$infos = array();
 		while( true )
