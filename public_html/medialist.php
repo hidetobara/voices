@@ -5,9 +5,7 @@ require_once( INCLUDE_DIR . "DB/PlaylistInfo.php" );
 require_once( INCLUDE_DIR . "DB/MediaInfo.php" );
 
 class VoicelistWeb extends BaseWeb
-{
-	protected $mode;
-	
+{	
 	protected $mid;
 	protected $play;
 	protected $playDb;
@@ -25,6 +23,7 @@ class VoicelistWeb extends BaseWeb
 	function initialize()
 	{
 		$this->checkSession();
+		$this->assignSession();
 		
 		$this->play = new PlaylistInfo( $_REQUEST );
 		if( $this->play->playlistid )
@@ -52,7 +51,6 @@ class VoicelistWeb extends BaseWeb
 				break;
 		}
 
-		$this->assign( 'mode', $this->mode );
 		$this->assign( 'media_array', $medias );
 	}
 	
@@ -87,7 +85,7 @@ class VoicelistWeb extends BaseWeb
 		
 		unset( $medias[ $index ] );
 		$this->play->mediaids = $this->getMediaids($medias);
-				$this->playDb->updateInfo( $this->play );
+		$this->playDb->updateInfo( $this->play );
 	}
 	
 	function getMediaids( $medias )

@@ -4,7 +4,7 @@
 	<title>voice edit</title>
 </head>
 <body>
-{$error}<br/>
+{if $error}<div align="center">{$error}</div>{/if}
 
 {if $target_voice}
 <div align="center">

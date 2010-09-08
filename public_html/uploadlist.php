@@ -26,6 +26,7 @@ class UploadListWeb extends BaseWeb
 	function initialize()
 	{
 		$this->checkSession();
+		$this->assignSession();
 		
 		if( is_string($_REQUEST['command']) ) $this->command = $_REQUEST['command'];
 	}

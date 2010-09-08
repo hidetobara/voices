@@ -52,7 +52,9 @@
 </script> 
 {/literal}
 </head> 
-<body> 
+<body>
+{if $error}<div align="center">{$error}</div>{/if}
+
 <div id="jquery_jplayer"></div>
 <div align="center">
 	<table>

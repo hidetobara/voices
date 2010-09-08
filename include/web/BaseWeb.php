@@ -1,6 +1,6 @@
 <?php
 require_once( SMARTY_DIR . 'Smarty.class.php' );
-require_once( INCLUDE_DIR . 'ext/Log.php' );
+require_once( 'Log.php' );
 require_once( INCLUDE_DIR . 'VoiceException.php' );
 require_once( INCLUDE_DIR . "web/LoginSession.php" );
 require_once( INCLUDE_DIR . "web/CommonMessages.php" );

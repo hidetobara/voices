@@ -52,10 +52,7 @@ class PlayerWeb extends BaseWeb
 	}
 	
 	function handle()
-	{
-		$playlistArray = $this->playlistDb->getUserInfos( $this->userid );
-		$this->assign( "playlist_array", $playlistArray );	
-		
+	{		
 		if($this->mode == 'Playlist')
 		{
 			$playlistInfo = $this->playlistDb->getInfo( $this->memory['pid'] );
@@ -74,6 +71,9 @@ class PlayerWeb extends BaseWeb
 		}
 		
 		$info = MediaInfo::getInfo( $this->mid, array('detail'=>true) );
+
+		if( !$info->imageid && $playlistInfo->imageid ) $info->imageid = $playlistInfo->imageid;	///// modify imageid
+		
 		if( is_a($info,"VoiceInfo") )
 		{
 			if( !$info ) throw new VoiceException(CommonMessages::get()->msg('NO_VOICE_INFO'));

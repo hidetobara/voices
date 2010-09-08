@@ -3,7 +3,7 @@ INVALID_PARAMETER;Invalid parameter!;不正なパラメータです。
 UNKNOWN;Unknown error !;予期しないエラーが起こりました。
 
 LOGIN_ERROR;Login error !;ログインできません。
-NO_SESSION;No session !;セッションがありません。
+NO_SESSION;Please login this site !;ログインしてください。
 
 NOT_UPLOAD;Can not upload !;アップロードできません。
 

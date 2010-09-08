@@ -45,6 +45,8 @@ class SessionWeb extends BaseWeb
 				if( !$this->user->userId ) throw new VoiceException(CommonMessages::get()->msg('LOGIN_ERROR'));
 				
 				LoginSession::get()->make( $this->user->userId ); 
+				
+				$this->assignHash( LoginSession::get()->getSessionArray() );
 				$this->assign('logined',true);
 				break;
 				

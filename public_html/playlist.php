@@ -33,6 +33,7 @@ class PlaylistWeb extends BaseWeb
 	function initialize()
 	{
 		$this->checkSession();
+		$this->assignSession();
 
 		$this->mode = 'all';		
 	}

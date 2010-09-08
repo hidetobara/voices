@@ -4,16 +4,14 @@
 	<title>Media list</title>
 </head>
 <body>
-{$error}
+{if $error}<div align="center">{$error}</div>{/if}
 
-{if !$mode}
 <div align="center">
 	<div>Title: {$playlist_info->title|escape}</div>
 	<br />
 	
 	{include file='web/_media_array.tpl' _array=$media_array _is_medialist=true}
 </div>
-{/if}
 
 {include file='web/_footer.tpl'}
 </body>

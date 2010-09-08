@@ -4,8 +4,7 @@
 	<title>Playlist</title>
 </head>
 <body>
-
-{$error}<br/>
+{if $error}<div align="center">{$error}</div>{/if}
 
 {if $mode=="all"}
 <div align="center">
@@ -29,10 +28,10 @@
 </div>
 
 {elseif $mode=="edit"}
-	Edit playlist<br/>
+	Edit playlist<br />
 	
 	{if !$step}
-		{image_link playlist_info=$playlist_info size="icon"}
+		{image_link _playlist_info=$playlist_info size="icon"}
 		<form action="{$HOME_URL}playlist.php" method="POST" enctype="multipart/form-data"/>
 			<input type="hidden" name="command" value="update"/>
 			<input type="hidden" name="playlist_id" value="{$playlist_info->playlistid}"/>
