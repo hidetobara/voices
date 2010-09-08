@@ -47,7 +47,7 @@
 		</form><br/>
 	{elseif $step == "updated"}
 		Update !<br/>
-		{image_link playlist_info=$playlist_info size="icon"}
+		{image_link _playlist_info=$playlist_info size="icon"}
 		Title: {$playlist_info->title|escape}<br/>
 	{elseif $step == "deleted"}
 		Deleted !<br/>
