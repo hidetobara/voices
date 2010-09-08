@@ -43,8 +43,8 @@
 			<tr>
 				<td></td>
 				<td>
-					<a href="{$HOME_URL}uploadlist.php">&gt;&gt;&gt;Uploadlist</a>
-					<a href="{$HOME_URL}upload.php">&gt;&gt;&gt;Upload again</a>
+					<a href="{$HOME_URL}uploadlist.php">&gt;&gt;&gt;Uploadlist</a><br />
+					<a href="{$HOME_URL}upload.php">&gt;&gt;&gt;Upload again</a><br />
 				</td>
 			</tr>
 		</table>
