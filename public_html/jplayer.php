@@ -30,7 +30,7 @@ class PlayerWeb extends BaseWeb
 	
 	function initialize()
 	{
-		//$this->checkSession();
+		$this->checkSession();
 		$this->assignSession();
 
 		if( $_REQUEST['memory'] )
