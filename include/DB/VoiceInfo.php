@@ -91,10 +91,12 @@ class VoiceInfo extends MediaInfo
 		$array = array(
 			'voice_id' => $this->voiceid,
 			'user_id' => $this->userid,
+			'dst' => $this->dst,
 			'image_id' => $this->imageid,
 			'title' => $this->title,
 			'artist' => $this->artist,
-			'playedCount' => $this->playedCount );
+			'description' => $this->description,
+			'played_count' => $this->playedCount );
 		if( $this->imageid ) $array['image_url'] = sprintf( "%simage.php?id=%d", API_URL, $this->imageid );
 		return $array;
 	}
@@ -242,6 +244,21 @@ class VoiceInfoDB extends BaseDB
 			$infos[] = new VoiceInfo( $hash );
 		}
 		return $infos;
+	}
+	function getListByRecent( $limit=100 )
+	{
+		$sql = sprintf( "SELECT * FROM %s WHERE 1 ORDER BY `voice_id` DESC LIMIT 0, %d",
+			self::TABLE_PLAYING, is_numeric($limit) ? $limit : 100 );
+		$state = $this->pdo->query( $sql );
+
+		$list = array();
+		while( true )
+		{
+			$hash = $state->fetch( PDO::FETCH_ASSOC );
+			if( !$hash ) break;
+			$list[ $hash['voice_id'] ] = $hash['played_count'];
+		}
+		return $list;
 	}
 	
 	function delete( VoiceInfo $i )

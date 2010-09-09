@@ -5,7 +5,7 @@
 </head>
 <body>
 {if $logined}
-	<div align="center">"
+	<div align="center">
 		you are logined.<br />
 		<form action='{$SECURE_HOME_URL}session.php' METHOD='POST'>
 			<input type='hidden' name='command' value='logout'/>

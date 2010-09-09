@@ -14,6 +14,7 @@
 
 	{***** all *****}
 	All playlist<br />
+	<br />
 	{include file="web/_playlist_array.tpl" _array=$playlist_array}
 	
 	{***** new *****}
@@ -21,7 +22,6 @@
 	<form action="{$HOME_URL}playlist.php" method="POST">
 		<input type="hidden" name="command" value="new" />
 		Title: <input type="text" name="title"/><br />
-		IDs: <input type="text" name="media_ids"/><br />
 		<input type="submit" value="NEW" />
 	</form>
 

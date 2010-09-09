@@ -5,18 +5,19 @@
 </head>
 <body>
 {if $error}
-	<div align="center">
-		{$error}<br />
-	</div>
-	<br />
+	<div align="center">{$error}<br /></div><br />
 	
-{else}
+{elseif $mode == "recent"}
 	<div align="center">
-		Coming soon !<br />
+		Recent ranking<br />
+		<a href="{$HOME_URL}jplayer.php?ranking=recent">Play</a><br />
+		<br />
+
+		{include file='web/_media_array.tpl' _array=$media_array}
 	</div>
-	<br />
 	
 {/if}
+
 {include file='web/_footer.tpl'}
 </body>
 </html>
