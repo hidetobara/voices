@@ -65,7 +65,7 @@ class PlayerWeb extends BaseWeb
 	{		
 		if($this->mode == self::MODE_PLAYLIST) $this->handlePlaylist();
 		if($this->mode == self::MODE_RANKING) $this->handleRanking();
-		
+
 		if( is_a($this->media,"VoiceInfo") )
 		{
 			$apiUrl = sprintf("%smedia.php?id=%s",API_URL,$this->media->mediaid);

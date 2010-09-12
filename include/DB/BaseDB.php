@@ -13,9 +13,9 @@ class BaseDB
 		if( !$this->pdo )
 		{
 			$this->pdo = new PDO(
-				sprintf( "mysql:dbname=%s;host=%s", DB_NAME, DB_HOST ),
-				DB_USERNAME,
-				DB_PASSWORD
+				sprintf( "mysql:dbname=%s;host=%s", DBConfig::$NAME, DBConfig::$HOST ),
+				DBConfig::$USERNAME,
+				DBConfig::$PASSWORD
 				);
 			$this->pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 			$this->pdo->query("SET NAMES utf8;");

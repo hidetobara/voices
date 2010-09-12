@@ -78,19 +78,21 @@ class PlaylistWeb extends BaseWeb
 	
 	function handleEdit( $command )
 	{
-		$this->info = new PlaylistInfo( $_REQUEST );
-		if( !$this->info->playlistid ) return;
-
 		$this->mode = 'edit';
+		$pid = $_REQUEST['playlist_id'];
+		
 		if( $command == "update" )
 		{
-			$this->info = $this->db->getInfo( $this->info->playlistid );
-			$this->title = $_REQUEST['title'];
-						
-			if( $_FILES['image_file'] )
-			{	
+			$this->info = $this->db->getInfo( $pid );
+			$infoNew = new PlaylistInfo( $_REQUEST );
+			
+			$this->info->title = $infoNew->title;	/////copy title
+
+			$imageFile = $_FILES['image_file'];
+			if( $imageFile['size'] > 0 )
+			{
 				$imageInfo = $this->imageDb->newInfo( $this->userid );
-				$this->imageFile->save( $_FILES['image_file'], $imageInfo );
+				$this->imageFile->save( $imageFile, $imageInfo );
 				$this->info->imageid = $imageInfo->imageid;
 			}
 			
@@ -99,12 +101,15 @@ class PlaylistWeb extends BaseWeb
 		}
 		else if( $command == "delete" )
 		{
+			$this->info = new PlaylistInfo( $_REQUEST );
+			if( !$this->info->playlistid ) return;
+
 			$this->db->deleteInfo( $this->info );
 			$this->step = 'deleted';
 		}
 		else
 		{
-			$this->info = $this->db->getInfo( $this->info->playlistid );
+			$this->info = $this->db->getInfo( $pid );
 		}
 	}
 }

@@ -10,7 +10,7 @@
 	<div>Title: {$playlist_info->title|escape}</div>
 	<br />
 	
-	{include file='web/_media_array.tpl' _array=$media_array _is_medialist=true}
+	{include file='web/_media_array.tpl' _array=$media_array}
 </div>
 
 {include file='web/_footer.tpl'}

@@ -191,7 +191,7 @@ class VoiceInfoDB extends BaseDB
 		$sql = sprintf("SELECT * FROM %s WHERE `voice_id`=:vid LIMIT 1",
 			self::TABLE_INFO);
 		$state = $this->pdo->prepare( $sql );
-		if( !$state->execute( $params ) ) return new VoiceInfo( array('voice_id'=>$id) );
+		if( !$state->execute( $params ) ) return null;
 		
 		$info = $state->fetch( PDO::FETCH_ASSOC );
 		return new VoiceInfo( $info );		

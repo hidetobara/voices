@@ -45,7 +45,7 @@ class DownloadVoice
 		{
 			$path = $this->info->dst;
 			if( !file_exists($path) ) throw new VoiceException(self::ERROR_NO_FILE);
-	
+
 			$voiceDb = new VoiceInfoDB();
 			$voiceDb->getPlaying($this->info);
 			$this->info->playedCount++;

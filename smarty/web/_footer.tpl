@@ -1,5 +1,4 @@
 
-
 <div style="text-align:center">
 	{if !$session_userid}
 		<a href="{$HOME_URL}">Top</a> |
