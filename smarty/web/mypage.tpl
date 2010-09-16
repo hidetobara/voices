@@ -2,8 +2,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>My page</title>
+	{include file='web/_bg_style.tpl'}
 </head>
-<body>
+<body id="bg">
 {if $error}
 	<div align="center">
 		{$error}<br />
@@ -15,6 +16,7 @@
 		<a href="{$HOME_URL}upload.php">Upload music</a><br />
 		<a href="{$HOME_URL}playlist.php">Playlist</a><br />
 		<a href="{$HOME_URL}uploadlist.php">Uploadlist</a><br />
+		<a href="{$HOME_URL}password.php">Change password</a><br />
 		<br />
 	</div>
 	

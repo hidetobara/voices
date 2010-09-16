@@ -45,7 +45,7 @@ class VoiceEditWeb extends BaseWeb
 	}
 	
 	function handle()
-	{	//var_dump($_REQUEST);
+	{
 		$command = $_REQUEST['command'];
 		$pid = $_REQUEST['playlist_id'];
 		if( $command == "register_playlist" && $pid )

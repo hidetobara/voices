@@ -26,7 +26,7 @@ function smarty_function_image_link($params, &$smarty)
 	if( !$imageid || !$size )
 	{
 		if( !$size ) $size = 64;
-		print "<img height={$size} width={$size}>";
+		print "<img height='{$size}' width='{$size}' border='1'>";
 		return;
 	}
 	

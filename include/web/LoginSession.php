@@ -34,6 +34,9 @@ class LoginSession
 		$this->tempKey = new TempKey( array('user_id'=>$userid) );
 		$this->tempKeyDB->updateTempKey( $this->tempKey );
 
+		$_REQUEST[ self::SESSION_USERID ] = $this->tempKey->userId;
+		$_REQUEST[ self::SESSION_KEY ] = $this->tempKey->tempKey;
+		
 		switch($this->mode)
 		{
 		case self::MODE_COOKIE:
@@ -63,7 +66,7 @@ class LoginSession
 	{
 		$key = $_REQUEST[ self::SESSION_KEY ];
 		$userid = $_REQUEST[ self::SESSION_USERID ];
-		
+
 		if( $key && $userid ) return new TempKey( array('user_id'=>$userid,'temp_key'=>$key) );
 		
 		return null;

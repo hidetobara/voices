@@ -2,8 +2,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Ranking</title>
+	{include file='web/_bg_style.tpl'}
 </head>
-<body>
+<body id="bg">
 {if $error}
 	<div align="center">{$error}<br /></div><br />
 	

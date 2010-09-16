@@ -1,5 +1,5 @@
 <?php
-class VoiceException extends Exception
+class VoiceWarning extends Exception
 {
 	public $location;
 	public $array;
@@ -9,5 +9,9 @@ class VoiceException extends Exception
 		$this->location = $this->getFile() . "#" . $this->getLine();
 		$this->array = $array;
 	}
+}
+
+class VoiceException extends VoiceWarning
+{
 }
 ?>

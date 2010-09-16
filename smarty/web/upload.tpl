@@ -2,8 +2,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Upload media file.</title>
+	{include file='web/_bg_style.tpl'}
 </head>
-<body>
+<body id="bg">
 {if $error}
 	<div align="center">
 		{$error}<br />
@@ -16,6 +17,7 @@
 	
 {elseif $mode == "input"}
 	<div align="center">
+		The limit of upload file size is 32M !<br />
 		<form action="{$HOME_URL}upload.php" method="POST" enctype="multipart/form-data"/>
 			<input type="hidden" name="command" value="upload"/>
 			

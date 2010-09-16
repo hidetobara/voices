@@ -73,6 +73,7 @@ class UploadListWeb extends BaseWeb
 	function handleEdit()
 	{
 		$voiceNew = new VoiceInfo( $_REQUEST );
+		$voiceNew->checkDetail();
 
 		if( $_FILES['image_file'] )
 		{	

@@ -1,11 +1,11 @@
 <html xmlns='http://www.w3.org/1999/xhtml' lang='en' xml:lang='en'> 
 <head> 
-<!-- Website Design By: www.happyworm.com --> 
-<title>Demo (jPlayer 1.2.0) : jPlayer as a stylish audio player</title> 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
- 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> 
-<script type="text/javascript" src="js/jquery.jplayer.min.js"></script> 
+	<title>a simple audio player</title> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+	{include file='web/_bg_style.tpl'}
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> 
+	<script type="text/javascript" src="js/jquery.jplayer.min.js"></script> 
 {literal}
 	<script type="text/javascript"> 
 	<!--
@@ -49,10 +49,10 @@
 		http.send(null);
 	}
 	-->
-</script> 
+	</script> 
 {/literal}
 </head> 
-<body>
+<body id="bg">
 {if $error}<div align="center">{$error}</div>{/if}
 
 <div id="jquery_jplayer"></div>

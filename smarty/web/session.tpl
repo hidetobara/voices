@@ -2,8 +2,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Session</title>
+	{include file='web/_bg_style.tpl'}
 </head>
-<body>
+<body id="bg">
 {if $logined}
 	<div align="center">
 		you are logined.<br />

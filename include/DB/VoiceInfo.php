@@ -7,7 +7,7 @@ class VoiceInfo extends MediaInfo
 {
 	const TITLE_LENGTH_MAX = 64;
 	const ARTIST_LENGTH_MAX = 64;
-	const DESCRIPTION_LENGTH_MAX = 512;
+	const DESCRIPTION_LENGTH_MAX = 256;
 	const TAG_LENGTH_MAX = 16;
 	const TAGS_MAX = 10;
 	

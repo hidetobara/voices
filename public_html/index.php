@@ -1,17 +1,22 @@
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title></title>
-</head>
-<body>
-<div align="center">
-	<div>Put once, play anywhere !</div>
-	<br />
-	<div><a href='./session.php'>Login/Logout</a></div>
-	<div><a href='./ranking.php'>Ranking</a></div>
-	<div><a href='./playlist.php'>Playlist</a></div>
-	<div><a href='./mypage.php'>My page</a></div>
-</div>
+<?php
+require_once( "../configure.php" );
+require_once( INCLUDE_DIR . "web/BaseWeb.php" );
 
-</body>
-</html>
+class MyTop extends BaseWeb
+{
+	function __construct( $opt=null )
+	{
+		parent::__construct( $opt );
+		
+		$this->name = 'top';
+		$this->template = 'top.tpl';
+	}
+	
+	function initialize()
+	{
+		$this->assignSession();
+	}
+}
+$page = new MyTop();
+$page->run();
+?>

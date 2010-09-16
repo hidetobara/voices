@@ -2,8 +2,11 @@
 INVALID_PARAMETER;Invalid parameter!;不正なパラメータです。
 UNKNOWN;Unknown error !;予期しないエラーが起こりました。
 
+AUTH_ERROR;Authorize error !;認証エラー。
 LOGIN_ERROR;Login error !;ログインできません。
 NO_SESSION;Please login this site !;ログインしてください。
+
+NOT_MATCH_PASSWORDS;Not match passwords !;パスワードが一致しません。
 
 NOT_UPLOAD;Can not upload !;アップロードできません。
 

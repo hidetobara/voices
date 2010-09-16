@@ -34,7 +34,11 @@ class BaseWeb
 	function setTemplate( $tpl ){		$this->template = $tpl;		}
 	
 	function assign( $key, $item ){		$this->assigned[ $key ] = $item;		}
-	function assignHash( $hash ){		foreach( $hash as $key => $item ) $this->assigned[ $key ] = $item;		}
+	function assignHash( $hash )
+	{
+		if( !is_array($hash) || count($hash)==0 ) return;
+		foreach( $hash as $key => $item ) $this->assigned[ $key ] = $item;
+	}
 	
 	function run()
 	{
@@ -47,7 +51,7 @@ class BaseWeb
 		{
 			$path = LOG_DIR . 'web/' . $this->name . date('Ymd') . '.log';
 			Log::singleton('file', $path, 'ERR', array('mode'=>0777))
-				->log( $ex->getMessage() . " @" . $ex->location . " :" . var_export($ex->array,true) );
+				->log( $ex->getMessage() . " @" . $ex->location . " : DUMP=" . json_encode($ex->array) );
 			$this->assign( 'error', $ex->getMessage() );
 		}
 		$this->display();
