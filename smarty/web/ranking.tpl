@@ -14,7 +14,22 @@
 		<a href="{$HOME_URL}jplayer.php?ranking=recent">Play</a><br />
 		<br />
 
-		{include file='web/_media_array.tpl' _array=$media_array}
+		<table style='border-width: 0'>
+			{foreach from=$media_array key=index item=media}
+				<tr>
+				<td style='text-align: left'>
+					{include file='web/_media.tpl' _media=$media}
+				</td>
+				</tr>
+				<tr>
+				<td colspan='1'>
+					<hr width="100%"/>
+				</td>
+				</tr>
+			{foreachelse}
+				<tr><td>No items.</td></tr>
+			{/foreach}
+		</table>
 	</div>
 	
 {/if}

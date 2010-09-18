@@ -14,4 +14,13 @@ class VoiceWarning extends Exception
 class VoiceException extends VoiceWarning
 {
 }
+
+class VoiceMessageException extends VoiceException
+{
+	function __construct( $id, $array=null )
+	{
+		$message = CommonMessages::get()->msg( $id );
+		parent::__construct( $message, $array );
+	}
+}
 ?>
