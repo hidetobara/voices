@@ -16,12 +16,13 @@
 			var urlNext = "{$url_next}";
 {literal}
 			// Local copy of jQuery selectors, for performance.
-			var jpPlayTime = $("#jplayer_play_time");
-			var jpTotalTime = $("#jplayer_total_time");
+			var jpPlayTime = $("#player_play_time");
+			var jpTotalTime = $("#player_total_time");
 		 
 			$("#jquery_jplayer").jPlayer({
 				ready: function () {
 					this.element.jPlayer("setFile", apiNow ).jPlayer("play");
+					$('#player_play').css('display','none');
 				},
 				volume: 30,
 				oggSupport: false,
@@ -35,9 +36,34 @@
 				//this.element.jPlayer("setFile", urlVoiceNext ).jPlayer("play");
 				if(urlNext != "") document.location = urlNext;
 			});
+
+			$("#player_play").click( function() {
+				$('#jquery_jplayer').jPlayer("play");
+				$(this).css('display','none');
+				$('#player_pause').css('display','inline');
+				$(this).blur();
+				return false;
+			});
+		 
+			$("#player_pause").click( function() {
+				$('#jquery_jplayer').jPlayer("pause");
+				$('#player_play').css('display','inline');
+				$(this).css('display','none');
+				$(this).blur();
+				return false;
+			});
+		 
+			$("#player_stop").click( function() {
+				//$('#jquery_jplayer').jPlayer("stop");	///// chrome does not work well.
+				$("#jquery_jplayer").jPlayer("setFile", apiNow );
+				$('#player_play').css('display','inline');
+				$('#player_pause').css('display','none');
+				$(this).blur();
+				return false;
+			});
 		}
 	);
-
+	
 	function mylistRegister()
 	{
 		var options = document.getElementById("mylist_options");
@@ -56,15 +82,17 @@
 {if $error}<div align="center">{$error}</div>{/if}
 
 <div id="jquery_jplayer"></div>
+
 <div align="center">
+	<br />
 	<table>
 		<tr>
 			<td colspan='2'>{image_link _media_info=$media_info size="wall"}<br/></td>
 		</tr>
 		<tr>
 			<td colspan='2'>
-				<span id="jplayer_play_time" class="jp-play-time"></span> /
-				<span id="jplayer_total_time" class="jp-total-time"></span>
+				<span id="player_play_time"></span> /
+				<span id="player_total_time"></span>
 			</td>
 		</tr>
 		<tr>
@@ -75,11 +103,16 @@
 		</tr>
 		<tr>
 			<td style="text-align: left">
-				<a href="#" id="jplayer_play" class="jp-play">play</a>
-				<a href="#" id="jplayer_pause" class="jp-pause">pause</a>
+				<a href="#" id="player_play">play</a>
+				<a href="#" id="player_pause">pause</a>
 			</td>
 			<td style="text-align: right">
-				<a href="#" id="jplayer_stop" class="jp-stop">stop</a>
+				<a href="#" id="player_stop">stop</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'>
+				<span id="mylist_out"></span>
 			</td>
 		</tr>
 		<tr>

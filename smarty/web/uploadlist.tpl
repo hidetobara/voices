@@ -45,7 +45,25 @@
 		<div>My media: {$my_total_size} KB / {$size_limit} KB</div>
 		<br />
 		
+		{if $paging->pageCount > 1}
+			<div>
+			{foreach from=$paging->pages item=p}
+				{if $p != 1} | {/if}
+				{if $p == $paging->currentPage} {$p} {else} <a href="{$HOME_URL}uploadlist.php?page={$p}">{$p}</a> {/if}
+			{/foreach}
+			</div>
+		{/if}
+		
 		{include file='web/_uploadlist_media_array.tpl' _array=$my_voice_infos}
+
+		{if $paging->pageCount > 1}
+			<div>
+			{foreach from=$paging->pages item=p}
+				{if $p != 1} | {/if}
+				{if $p == $paging->currentPage} {$p} {else} <a href="{$HOME_URL}uploadlist.php?page={$p}">{$p}</a> {/if}
+			{/foreach}
+			</div>
+		{/if}		
 	</div>
 
 {/if}

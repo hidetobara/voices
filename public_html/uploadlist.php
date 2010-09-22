@@ -5,6 +5,7 @@ require_once( INCLUDE_DIR . "File/VoiceFile.php" );
 require_once( INCLUDE_DIR . "DB/VoiceInfo.php" );
 require_once( INCLUDE_DIR . "File/ImageFile.php" );
 require_once( INCLUDE_DIR . "DB/ImageInfo.php" );
+require_once( INCLUDE_DIR . "web/MediaPaging.php" );
 
 
 class UploadListWeb extends BaseWeb
@@ -15,6 +16,7 @@ class UploadListWeb extends BaseWeb
 	protected $imageFile;
 	
 	protected $command;
+	protected $page;
 	
 	function __construct( $opt=null )
 	{
@@ -36,6 +38,7 @@ class UploadListWeb extends BaseWeb
 		$this->assignSession();
 		
 		if( is_string($_REQUEST['command']) ) $this->command = $_REQUEST['command'];
+		if( is_numeric($_REQUEST['page']) ) $this->page = $_REQUEST['page'];
 	}
 	function handle()
 	{
@@ -66,8 +69,16 @@ class UploadListWeb extends BaseWeb
 		}
 		
 		$infos = $this->voiceDb->getInfosByUser( $this->userid );
-		$this->assignMyInfos( $infos );
 		$this->assignMySize( $infos );
+		
+		if( count($infos) > 0 )
+		{
+			$paging = new MediaPaging();
+			$paging->generate( $infos, $this->page );
+			$this->assign( 'paging', $paging );
+		}
+		
+		$this->assignMyInfos( $paging->items );
 	}
 	
 	function handleEdit()

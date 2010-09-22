@@ -54,11 +54,17 @@ class MedialistWeb extends BaseWeb
 			
 			switch( $this->command )
 			{
+				case 'top':
+					$this->topMedia( $medias, $this->index );
+					break;
 				case 'up':
 					$this->upMedia( $medias, $this->index );
 					break;
 				case 'down':
 					$this->downMedia( $medias, $this->index );
+					break;
+				case 'bottom':
+					$this->bottomMedia( $medias, $this->index );
 					break;
 					
 				case 'add':
@@ -68,6 +74,11 @@ class MedialistWeb extends BaseWeb
 					$this->deleteMedia( $medias, $this->index );
 					break;
 			}
+
+			$ids = array();
+			foreach( $medias as $media ) $ids[] = $media->mediaid;
+			$this->play->mediaids = $ids;
+			$this->playDb->updateInfo( $this->play );
 		}
 
 		$this->assign( 'media_array', $medias );
@@ -88,6 +99,14 @@ class MedialistWeb extends BaseWeb
 		return $voices;		
 	}
 
+	function topMedia( &$medias, $index )
+	{
+		if( $index <= 0 ) return;
+		
+		$tmp = $medias[ $index ];
+		unset( $medias[ $index ] );
+		array_unshift( $medias, $tmp );	
+	}
 	function upMedia( &$medias, $index )
 	{
 		$previous = $index - 1;
@@ -95,12 +114,8 @@ class MedialistWeb extends BaseWeb
 		
 		$tmp = $medias[ $previous ];
 		$medias[ $previous ] = $medias[ $index ];
-		$medias[ $index ] = $tmp;
-		
-		$this->play->mediaids = $this->getMediaids($medias);
-		$this->playDb->updateInfo( $this->play );
+		$medias[ $index ] = $tmp;		
 	}
-	
 	function downMedia( &$medias, $index )
 	{
 		$next = $index + 1;
@@ -109,11 +124,15 @@ class MedialistWeb extends BaseWeb
 		$tmp = $medias[ $next ];
 		$medias[ $next ] = $medias[ $index ];
 		$medias[ $index ] = $tmp;
-		
-		$this->play->mediaids = $this->getMediaids($medias);
-		$this->playDb->updateInfo( $this->play );
 	}
-	
+	function bottomMedia( &$medias, $index )
+	{
+		if( $index >= count($medias)-1 ) return;
+		
+		$tmp = $medias[ $index ];
+		unset( $medias[ $index ] );
+		array_push( $medias, $tmp );
+	}
 	function addMedia( &$medias, $vid )
 	{
 		if( !$vid ) throw new VoiceMessageException('NO_MEDIA_INFO');
@@ -122,9 +141,6 @@ class MedialistWeb extends BaseWeb
 		if( !$info ) return;
 		
 		$medias[] = $info;
-		
-		$this->play->mediaids = $this->getMediaids($medias);
-		$this->playDb->updateInfo( $this->play );
 	}
 	
 	function deleteMedia( &$medias, $index )
@@ -132,16 +148,6 @@ class MedialistWeb extends BaseWeb
 		if( !is_numeric($index) ) throw new VoiceMessageException('NO_MEDIA_INFO');
 		
 		unset( $medias[ $index ] );
-		
-		$this->play->mediaids = $this->getMediaids($medias);
-		$this->playDb->updateInfo( $this->play );
-	}
-		
-	function getMediaids( $medias )
-	{
-		$keys = array();
-		foreach( $medias as $info ) $keys[] = $info->mediaid;
-		return $keys;
 	}
 	
 	function checkOwnPlaylist( $play )
