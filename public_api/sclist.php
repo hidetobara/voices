@@ -1,12 +1,12 @@
 <?php
 require_once( "../configure.php" );
 require_once( INCLUDE_DIR . "VoiceException.php" );
-require_once( INCLUDE_DIR . "web/BaseXml.php" );
+require_once( INCLUDE_DIR . "web/BaseApi.php" );
 require_once( INCLUDE_DIR . "DB/PlaylistInfo.php" );
 require_once( INCLUDE_DIR . "DB/VoiceInfo.php" );
 
 
-class PlaylistXml extends BaseXml
+class PlaylistXml extends BaseApi
 {
 	protected $playlistDb;
 	protected $voiceDb;
@@ -61,12 +61,12 @@ class PlaylistXml extends BaseXml
 		if( $nid ) $ninfo = $this->voiceDb->getInfo( $nid );
 		if( $ninfo ) $this->assign( 'next_voice', $ninfo->toArray() );
 		
-		$stack = array(
+		$memory = array(
 			'mode' => 'playlist',
 			'playlist_id' => $this->playlistInfo->playlistid,
 			'index' => $this->index
 			);
-		$this->assign( 'stack', $stack );
+		$this->assign( 'memory', $memory );
 	}
 }
 

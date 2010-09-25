@@ -12,8 +12,10 @@
 	$(document).ready( function()
 		{
 {/literal}
-			var apiNow = "{$api_now}&{$session_urlparam}";
+			var apiMedia = "{$api_media}&{$session_urlparam}";
+			var apiRegister = "{$api_url}register_media.php?{$session_urlparam}";
 			var urlNext = "{$url_next}";
+			var mediaId = "{$media_info->mediaid}";
 {literal}
 			// Local copy of jQuery selectors, for performance.
 			var jpPlayTime = $("#player_play_time");
@@ -21,7 +23,7 @@
 		 
 			$("#jquery_jplayer").jPlayer({
 				ready: function () {
-					this.element.jPlayer("setFile", apiNow ).jPlayer("play");
+					this.element.jPlayer("setFile", apiMedia ).jPlayer("play");
 					$('#player_play').css('display','none');
 				},
 				volume: 30,
@@ -61,19 +63,30 @@
 				$(this).blur();
 				return false;
 			});
+
+			$("#register_media").click( function()
+				{
+					var selector = document.getElementById("mylist_options");
+					var mylist = selector.options[selector.selectedIndex].value;
+					var url = apiRegister + "&mid=" + mediaId + "&lid=" + mylist;
+					//$("#registered_out").text("registering !" + url);
+					
+					var http = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('MSXML2.XMLHTTP');
+					http.open('GET', url);
+					http.onreadystatechange = function()
+						{
+							if (http.readyState == 4 )
+							{
+								var res = eval( "(" + http.responseText + ")" );
+								if( res.status == "ok" ) $("#registered_out").text("registered into " + res.title);
+							}
+						}
+					http.send(null);
+				}
+			);
+				
 		}
 	);
-	
-	function mylistRegister()
-	{
-		var options = document.getElementById("mylist_options");
-		var val = options.options[options.selectedIndex].value;
-		$("#mylist_out").text("registered! " + val);
-		
-		var http = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('MSXML2.XMLHTTP');
-		http.open('GET', '/public_api/image.php');
-		http.send(null);
-	}
 	-->
 	</script> 
 {/literal}
@@ -111,18 +124,23 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan='2'>
-				<span id="mylist_out"></span>
-			</td>
-		</tr>
-		<tr>
 			<td colspan='2'><hr /></td>
 		</tr>
+		{if $playlist_array}
 		<tr>
-			<td colspan='2' style="text-align: right">
-				<a href="media_edit.php?mid={$media_info->mediaid}">&gt;&gt;&gt;Edit</a>
+			<td colspan='2'>
+				<div id="registered_out">
+					Register media into a mylist<br />
+					<select name="playlist_id" id="mylist_options">
+					{foreach from=$playlist_array item=play}
+						<option value="{$play->playlistid}">{$play->title|escape}</option>
+					{/foreach}
+					</select>
+					<input type="submit" id="register_media" value="Register" />
+				</div>
 			</td>
 		</tr>
+		{/if}
 	</table>
 </div>
 

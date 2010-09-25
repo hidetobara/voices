@@ -80,7 +80,7 @@ class LoginSession
 			$this->updateCookie( $this->tempKey, $this->expireTime() );
 			return $this->tempKey->userId;
 		}
-				
+
 		return null;
 	}
 	

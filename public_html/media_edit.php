@@ -41,7 +41,7 @@ class VoiceEditWeb extends BaseWeb
 		}
 		
 		$this->playlistArray = $this->playlistDb->getUserInfos( $this->userid );
-		$this->assign( "playlist_array", $this->playlistArray );	
+		$this->assign( "playlist_array", $this->playlistArray );
 	}
 	
 	function handle()

@@ -21,19 +21,14 @@
 			<form action="{$HOME_URL}medialist.php" method="post">
 				<input type='hidden' name='playlist_id' value='{$playlist_info->playlistid}'>
 				<input type='hidden' name='index' value='{$index}'>
-				<select name="command">
+				<select name="command" value="select a move action">
 					<option value="top">Top</option>
 					<option value="up">Up</option>
 					<option value="down">Down</option>
 					<option value="bottom">Bottom</option>
+					<option value="delete">Remove</option>
 				</select>
 				<input type='submit' value='Move'>
-			</form>
-			<form action="{$HOME_URL}medialist.php" method="post">
-				<input type='hidden' name='playlist_id' value='{$playlist_info->playlistid}'>
-				<input type='hidden' name='command' value='delete'>
-				<input type='hidden' name='index' value='{$index}'>
-				<input type='submit' value='Delete'>
 			</form>
 		</td>
 		</tr>

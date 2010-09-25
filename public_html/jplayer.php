@@ -59,10 +59,19 @@ class PlayerWeb extends BaseWeb
 			$this->media = MediaInfo::getInfo( $mid, array('detail'=>true) );
 			return;
 		}
+		
 	}
 	
 	function handle()
-	{		
+	{
+		$this->assign( 'api_url', API_URL );
+		
+		if( $this->userid )
+		{
+			$playlistArray = $this->playlistDb->getUserInfos( $this->userid );
+			$this->assign( "playlist_array", $playlistArray );
+		}
+		
 		if($this->mode == self::MODE_PLAYLIST) $this->handlePlaylist();
 		if($this->mode == self::MODE_RANKING) $this->handleRanking();
 
@@ -70,7 +79,7 @@ class PlayerWeb extends BaseWeb
 		{
 			$apiUrl = sprintf("%smedia.php?id=%s",API_URL,$this->media->mediaid);
 			$this->assign( 'media_info', $this->media );
-			$this->assign( 'api_now', $apiUrl );
+			$this->assign( 'api_media', $apiUrl );
 		}
 	}
 	

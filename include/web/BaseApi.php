@@ -4,14 +4,16 @@ require_once( INCLUDE_DIR . 'VoiceException.php' );
 require_once( INCLUDE_DIR . "web/LoginSession.php" );
 require_once( INCLUDE_DIR . "web/CommonMessages.php" );
 
-class BaseXml
+class BaseApi
 {
 	protected $userid;
 	protected $array;
+	protected $format;
 	
 	function __construct( $opt=null )
 	{
 		$this->array = array( 'status' => 'undefined' );
+		$this->format = "xml";
 	}
 	
 	function assign( $name, $value )
@@ -46,6 +48,12 @@ class BaseXml
 
 		$this->userid = $userid;
 	}
+	protected function checkFormat( $default=null )
+	{
+		$this->format = $_REQUEST['format'];
+		$validFormats = array( 'xml', 'json' );
+		if( !in_array($this->format,$validFormats) ) $this->format = $default;
+	}
 	
 	protected function initialize()
 	{
@@ -57,11 +65,18 @@ class BaseXml
 	
 	protected function display()
 	{
-		$context = $this->toXml( $this->array, 'voice' );
-		
-		header( "Content-type: text/xml" );
-		header( "Content-Length: " . count($context) );
-		print $context;
+		switch($this->format)
+		{
+			case 'xml':
+				$context = $this->toXml( $this->array, 'voice' );				
+				header( "Content-type: text/xml" );
+				header( "Content-Length: " . count($context) );
+				print $context;
+				break;
+				
+			case 'json':
+				print json_encode( $this->array );
+		}
 	}
 	
 	protected function finalize()
