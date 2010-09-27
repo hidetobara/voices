@@ -19,41 +19,62 @@
 	{include file="web/_playlist_array.tpl" _array=$playlist_array}
 	
 	{***** new *****}
-	New playlist<br />
-	<form action="{$HOME_URL}playlist.php" method="POST">
-		<input type="hidden" name="command" value="new" />
-		Title: <input type="text" name="title"/><br />
-		<input type="submit" value="NEW" />
-	</form>
+	<table><tr><td>
+		<div align="center">New playlist</div>
+		<form action="{$HOME_URL}playlist.php" method="POST">
+			<div align="left">
+				<input type="hidden" name="command" value="new" />
+				Title: <input type="text" name="title"/><br />
+			</div>
+			<div align="right">
+				<input type="submit" value="NEW" />
+			</div>
+		</form>
+	</td></tr></table>
 
 </div>
 
 {elseif $mode=="edit"}
+<div align="center">
 	Edit playlist<br />
 	
 	{if !$step}
-		{image_link _playlist_info=$playlist_info size="icon"}
+	<table><tr><td>
 		<form action="{$HOME_URL}playlist.php" method="POST" enctype="multipart/form-data"/>
-			<input type="hidden" name="command" value="update"/>
-			<input type="hidden" name="playlist_id" value="{$playlist_info->playlistid}"/>
-			Title: <input type="text" name="title" value="{$playlist_info->title|escape}"/><br/>
-			Image: <input type="file" name="image_file"/><br/>
-			<input type="submit" value="UPDATE"/>
-		</form><br/>
+			<div align="left">
+				{image_link _playlist_info=$playlist_info size="icon"}<br />
+				<input type="hidden" name="command" value="update"/>
+				<input type="hidden" name="playlist_id" value="{$playlist_info->playlistid}"/>
+				Title: <input type="text" name="title" value="{$playlist_info->title|escape}"/><br/>
+				Image: <input type="file" name="image_file"/><br/>
+			</div>
+			<div align="right">
+				<input type="submit" value="UPDATE"/>
+			</div>
+		</form>
 		<form action="{$HOME_URL}playlist.php" method="POST">
-			<input type="hidden" name="command" value="delete"/>
-			<input type="hidden" name="playlist_id" value="{$playlist_info->playlistid}"/>
-			<input type="hidden" name="title" value="{$playlist_info->title|escape}"/>
-			<input type="submit" value="DELETE"/>
-		</form><br/>
+			<div align="left">
+				<input type="hidden" name="command" value="delete"/>
+				<input type="hidden" name="playlist_id" value="{$playlist_info->playlistid}"/>
+				<input type="hidden" name="title" value="{$playlist_info->title|escape}"/>
+			</div>
+			<div align="right">
+				<input type="submit" value="DELETE"/>
+			</div>
+		</form>
+	</td></tr></table>
+
 	{elseif $step == "updated"}
-		Update !<br/>
+		Update !<br />
 		{image_link _playlist_info=$playlist_info size="icon"}
 		Title: {$playlist_info->title|escape}<br/>
+		
 	{elseif $step == "deleted"}
-		Deleted !<br/>
+		Deleted !<br />
 		Title: {$playlist_info->title|escape}<br/>
+		
 	{/if}
+</div>
 
 {/if}
 
