@@ -9,7 +9,6 @@ class MyPassword extends BaseWeb
 	protected $userDb;
 	
 	protected $command;
-	protected $redirect;
 	
 	function __construct( $opt=null )
 	{
@@ -43,7 +42,7 @@ class MyPassword extends BaseWeb
 					break;
 					
 				default:
-					$this->redirect = SECURE_HOME_URL . "password.php?command=input";
+					$this->setRedirect( SECURE_HOME_URL . "password.php?command=input" );
 			}
 		}
 		catch(VoiceException $ex)
@@ -75,17 +74,6 @@ class MyPassword extends BaseWeb
 		$this->userDb->updateUser( $user );
 		
 		$this->assign( 'mode', 'updated' );
-	}
-	
-	function display()
-	{
-		if( $this->redirect )
-		{
-			header( sprintf("Location: %s", $this->redirect) );
-			return;
-		}
-		
-		parent::display();
 	}
 }
 $page = new MyPassword();

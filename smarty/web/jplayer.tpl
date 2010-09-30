@@ -56,8 +56,7 @@
 			});
 		 
 			$("#player_stop").click( function() {
-				//$('#jquery_jplayer').jPlayer("stop");	///// chrome does not work well.
-				$("#jquery_jplayer").jPlayer("setFile", apiNow );
+				$('#jquery_jplayer').jPlayer("stop");	///// chrome does not work well.
 				$('#player_play').css('display','inline');
 				$('#player_pause').css('display','none');
 				$(this).blur();

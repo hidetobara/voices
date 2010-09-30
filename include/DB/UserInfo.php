@@ -25,13 +25,16 @@ class UserInfo
 	{
 		if( is_array($obj) )
 		{
-			$this->userId = $obj['user_id'];
-			$this->username = $obj['username'];
-			$this->loginTime = $obj['login_time'];
-			$this->userStatus = $obj['user_status'];
+			if($obj['user_id']) $this->userId = $obj['user_id'];
+			if($obj['username']) $this->username = $obj['username'];
+			if($obj['login_time']) $this->loginTime = $obj['login_time'];
+			if($obj['user_status']) $this->userStatus = $obj['user_status'];
 			
-			$this->passwordLength = mb_strlen( $obj['password'] );
-			if( $obj['password'] ) $this->passwordMd5 = md5( $obj['password'] . PASSWORD_SEED );
+			if($obj['password'])
+			{
+				$this->passwordLength = mb_strlen( $obj['password'] );
+				$this->passwordMd5 = md5( $obj['password'] . PASSWORD_SEED );
+			}
 		}
 	}
 	
@@ -58,13 +61,13 @@ class UserDB extends BaseDB
 {
 	const TABLE_NAME = 'voices_users';
 	
-	function setUser( UserInfo $rec )
+	function addUser( UserInfo $rec )
 	{
-		$sql = sprintf("INSERT INTO %s (username,password_md5,mail,register_time,user_status) VALUES(:username,:passMd5,:mail,NOW(),:userStatus )",
+		$sql = sprintf("INSERT INTO %s (username,password_md5,user_status) VALUES(:username,:passMd5,:userStatus )",
 			self::TABLE_NAME);
 		$state = $this->pdo->prepare( $sql );
 		$state->execute(
-			array( ':username'=>$rec->username, ':passMd5'=>$rec->passwordMd5, ':mail'=>$rec->mail, ':userStatus'=>$rec->userStatus )
+			array( ':username'=>$rec->username, ':passMd5'=>$rec->passwordMd5, ':userStatus'=>$rec->userStatus )
 			);
 		return $state;
 	}
@@ -76,14 +79,17 @@ class UserDB extends BaseDB
 		$sql = sprintf( "Update `%s` SET", self::TABLE_NAME );
 		$params = array();
 		if( $rec->username ){
+			if( count($params) > 0 ) $sql .= ",";
 			$sql .= " username = :username";
 			$params[':username'] = $rec->username;
 		}
 		if( $rec->passwordMd5 ){
+			if( count($params) > 0 ) $sql .= ",";
 			$sql .= " password_md5 = :passMd5";
 			$params[':passMd5'] = $rec->passwordMd5;
 		}
 		if( $rec->userStatus ){
+			if( count($params) > 0 ) $sql .= ",";
 			$sql .= " user_status = :userStatus";
 			$params[':userStatus'] = $rec->userStatus;
 		}

@@ -6,9 +6,7 @@
 </head>
 <body id="bg">
 {if $error}
-	<div align="center">
-		{$error}<br />
-	</div>
+	<div align="center">{$error}<br /></div>
 
 {elseif $mode == 'deleting'}
 	<div align="center">

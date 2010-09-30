@@ -14,6 +14,7 @@ class BaseWeb
 	protected $templateGroup;
 	protected $name;
 	protected $template;
+	protected $redirectUrl;
 	
 	function __construct( $opt=null )
 	{
@@ -39,6 +40,8 @@ class BaseWeb
 		if( !is_array($hash) || count($hash)==0 ) return;
 		foreach( $hash as $key => $item ) $this->assigned[ $key ] = $item;
 	}
+	
+	function setRedirect( $url ){		$this->redirectUrl = $url;		}
 	
 	function run()
 	{
@@ -80,8 +83,13 @@ class BaseWeb
 	
 	protected function display()
 	{
-		$smarty = new Smarty();
+		if( $this->redirectUrl )
+		{
+			header( sprintf("Location: %s", $this->redirectUrl) );
+			return;
+		}
 		
+		$smarty = new Smarty();		
 		$smarty->template_dir = SMARTY_TEMPLATE_DIR;
 		$smarty->compile_dir  = SMARTY_WORK_DIR . 'templates_c/';
 		$smarty->cache_dir    = SMARTY_WORK_DIR . 'cache/';
