@@ -2,8 +2,7 @@
 <div style="text-align:center">
 	{if !$session_userid}
 		<a href="{$HOME_URL}">Top</a> |
-		<a href="{$HOME_URL}session.php">Login !</a> |
-		<a href="{$HOME_URL}ranking.php">Ranking</a>
+		<a href="{$HOME_URL}session.php">Login !</a>
 	{else}
 		<a href="{$HOME_URL}">Top</a> |
 		<a href="{$HOME_URL}ranking.php">Ranking</a> |

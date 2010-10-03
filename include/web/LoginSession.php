@@ -34,7 +34,7 @@ class LoginSession
 		$this->tempKey = new TempKey( array('user_id'=>$userid) );
 		$this->tempKeyDB->updateTempKey( $this->tempKey );
 
-		$_REQUEST[ self::SESSION_USERID ] = $this->tempKey->userId;
+		$_REQUEST[ self::SESSION_USERID ] = $this->tempKey->userid;
 		$_REQUEST[ self::SESSION_KEY ] = $this->tempKey->tempKey;
 		
 		switch($this->mode)
@@ -57,12 +57,12 @@ class LoginSession
 	
 	protected function updateCookie( TempKey $key, $timeout )
 	{
-		setcookie( self::SESSION_USERID, $key->userId, $timeout, $this->getHostPath(), $this->getHost() );
+		setcookie( self::SESSION_USERID, $key->userid, $timeout, $this->getHostPath(), $this->getHost() );
 		setcookie( self::SESSION_KEY, $key->tempKey, $timeout, $this->getHostPath(), $this->getHost() );
 	}
 	
 	
-	protected function getTempKey()
+	public function getTempKey()
 	{
 		$key = $_REQUEST[ self::SESSION_KEY ];
 		$userid = $_REQUEST[ self::SESSION_USERID ];
@@ -78,7 +78,7 @@ class LoginSession
 		if( $this->tempKey && $this->tempKeyDB->authorizeTempKey( $this->tempKey ) )
 		{
 			$this->updateCookie( $this->tempKey, $this->expireTime() );
-			return $this->tempKey->userId;
+			return $this->tempKey->userid;
 		}
 
 		return null;
@@ -90,9 +90,9 @@ class LoginSession
 		if( !$tempKey ) return null;
 		
 		return array(
-			self::SESSION_USERID => $tempKey->userId,
+			self::SESSION_USERID => $tempKey->userid,
 			self::SESSION_KEY => $tempKey->tempKey,
-			'session_urlparam' => sprintf("session_userid=%d&session_key=%s", $tempKey->userId, $tempKey->tempKey)
+			'session_urlparam' => sprintf("session_userid=%d&session_key=%s", $tempKey->userid, $tempKey->tempKey)
 			);
 	}
 	

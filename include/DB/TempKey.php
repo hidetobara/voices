@@ -3,7 +3,7 @@ require_once( INCLUDE_DIR . "DB/BaseDB.php" );
 
 class TempKey
 {
-	public $userId;
+	public $userid;
 	public $tempKey;
 	public $updateDate;
 
@@ -16,7 +16,7 @@ class TempKey
 	{
 		if( is_array( $obj ) )
 		{
-			$this->userId = $obj['user_id'];
+			$this->userid = $obj['user_id'];
 			$this->updateDate = $obj['update_date'];
 			
 			if( $obj['temp_key'] )
@@ -32,7 +32,7 @@ class TempKey
 	
 	public function makeTempKey()
 	{
-		$this->tempKey = md5( $this->userId . ":" . time() . ":" . rand(0,1000) );
+		$this->tempKey = md5( $this->userid . ":" . time() . ":" . rand(0,1000) );
 	}
 	
 	public function isAlive( $aliveDay )
@@ -53,13 +53,13 @@ class TempKeyDB extends BaseDB
 	
 	function updateTempKey( TempKey $rec )
 	{
-		if( !$rec->userId ) return false;
+		if( !$rec->userid ) return false;
 	
 		$sql = sprintf( "UPDATE `%s` SET `temp_key`=:tempKey, `update_date`=NOW() WHERE `user_id`=:userId",
 			self::TABLE_NAME );
 		$state = $this->pdo->prepare( $sql );
 		$state->execute(
-			array( ':userId' => $rec->userId, ':tempKey' => $rec->tempKey )
+			array( ':userId' => $rec->userid, ':tempKey' => $rec->tempKey )
 			);
 
 		if( $state->rowCount() == 0 )
@@ -68,7 +68,7 @@ class TempKeyDB extends BaseDB
 				self::TABLE_NAME );
 			$state = $this->pdo->prepare( $sql );
 			$state->execute(
-				array( ':userId' => $rec->userId, ':tempKey' => $rec->tempKey )
+				array( ':userId' => $rec->userid, ':tempKey' => $rec->tempKey )
 				);
 		}
 		return true;
@@ -76,13 +76,13 @@ class TempKeyDB extends BaseDB
 	
 	function authorizeTempKey( TempKey $rec )
 	{
-		if( !$rec->userId ) return null;
+		if( !$rec->userid ) return null;
 		
 		$sql = sprintf( "SELECT * FROM `%s` WHERE `user_id` LIKE :userId AND `temp_key` LIKE :tempKey",
 			self::TABLE_NAME );
 		$state = $this->pdo->prepare( $sql );
 		$state->execute(
-			array( ':userId' => $rec->userId, ':tempKey' => $rec->tempKey )
+			array( ':userId' => $rec->userid, ':tempKey' => $rec->tempKey )
 			);
 		$hash = $state->fetch(PDO::FETCH_ASSOC);
 		if( !$hash ) return null;

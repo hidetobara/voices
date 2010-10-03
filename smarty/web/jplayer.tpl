@@ -12,7 +12,7 @@
 	$(document).ready( function()
 		{
 {/literal}
-			var apiMedia = "{$api_media}&{$session_urlparam}";
+			var apiMedia = "{$api_media}";
 			var apiRegister = "{$api_url}register_media.php?{$session_urlparam}";
 			var urlNext = "{$url_next}";
 			var mediaId = "{$media_info->mediaid}";
@@ -24,9 +24,9 @@
 			$("#jquery_jplayer").jPlayer({
 				ready: function () {
 					this.element.jPlayer("setFile", apiMedia ).jPlayer("play");
-					$('#player_play').css('display','none');
+					//$('#player_play').css('display','none');
 				},
-				volume: 30,
+				volume: 25,
 				oggSupport: false,
 				preload: 'none'
 			})
@@ -41,24 +41,24 @@
 
 			$("#player_play").click( function() {
 				$('#jquery_jplayer').jPlayer("play");
-				$(this).css('display','none');
-				$('#player_pause').css('display','inline');
+				//$(this).css('display','none');
+				//$('#player_pause').css('display','inline');
 				$(this).blur();
 				return false;
 			});
 		 
 			$("#player_pause").click( function() {
 				$('#jquery_jplayer').jPlayer("pause");
-				$('#player_play').css('display','inline');
-				$(this).css('display','none');
+				//$('#player_play').css('display','inline');
+				//$(this).css('display','none');
 				$(this).blur();
 				return false;
 			});
 		 
 			$("#player_stop").click( function() {
 				$('#jquery_jplayer').jPlayer("stop");	///// chrome does not work well.
-				$('#player_play').css('display','inline');
-				$('#player_pause').css('display','none');
+				//$('#player_play').css('display','inline');
+				//$('#player_pause').css('display','none');
 				$(this).blur();
 				return false;
 			});
@@ -115,11 +115,11 @@
 		</tr>
 		<tr>
 			<td style="text-align: left">
-				<a href="#" id="player_play">play</a>
-				<a href="#" id="player_pause">pause</a>
 			</td>
 			<td style="text-align: right">
-				<a href="#" id="player_stop">stop</a>
+				<a href="#" id="player_play">play</a>
+				| <a href="#" id="player_pause">pause</a>
+				| <a href="#" id="player_stop">stop</a>
 			</td>
 		</tr>
 		<tr>
