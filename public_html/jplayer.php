@@ -77,9 +77,14 @@ class PlayerWeb extends BaseWeb
 
 		if( is_a($this->media,"VoiceInfo") )
 		{
-			$apiUrl = sprintf("%smedia.php?id=%s",API_URL,$this->media->mediaid);
+			$key = LoginSession::get()->getTempKey();
+			$apiMedia = sprintf("%smedia/%d/%s/%s.mp3",
+				API_URL,
+				$key->userid,
+				$key->tempKey,
+				$this->media->mediaid );
 			$this->assign( 'media_info', $this->media );
-			$this->assign( 'api_media', $apiUrl );
+			$this->assign( 'api_media', $apiMedia );
 		}
 	}
 	
