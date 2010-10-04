@@ -4,10 +4,10 @@ require_once( INCLUDE_DIR . "DB/TempKey.php" );
 class LoginSession
 {
 	static protected $Instance;
-	static function get()
+	static function get( $opt=null )
 	{
-		if( !LoginSession::$Instance ) LoginSession::$Instance = new LoginSession();
-		return LoginSession::$Instance;
+		if( !self::$Instance ) self::$Instance = new self( $opt );
+		return self::$Instance;
 	}
 	
 	const SESSION_KEY = 'session_key';
@@ -21,9 +21,9 @@ class LoginSession
 	const MODE_COOKIE = 1;
 	const MODE_FLAG = 2;
 	
-	function __construct( $options=null )
+	function __construct( $opt=null )
 	{
-		$this->tempKeyDB = $options['TempKeyDB'] ? $options['TempKeyDB'] : new TempKeyDB();
+		$this->tempKeyDB = $opt['TempKeyDB'] ? $opt['TempKeyDB'] : new TempKeyDB();
 
 		$this->mode = self::MODE_FLAG;
 		if( $this->isCookieEnable() ) $this->mode = self::MODE_COOKIE;

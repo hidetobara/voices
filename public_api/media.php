@@ -66,11 +66,10 @@ class DownloadVoice
 			$this->info->playedCount++;
 			$voiceDb->updatePlaying($this->info);
 			
+			//header('Cache-Control: public');
 			header('Content-type: audio/mpeg');
+			header('Accept-Ranges: bytes');
 			header('Content-Length: ' . filesize($path));
-			header('Content-Disposition: filename=' . $this->info->mediaid. '.mp3');
-			header('X-Pad: avoid browser bug');
-			Header('Cache-Control: no-cache');
 			readfile($path);
 		}
 	}

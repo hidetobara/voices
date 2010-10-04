@@ -4,6 +4,7 @@ require_once( INCLUDE_DIR . "VoiceException.php" );
 require_once( INCLUDE_DIR . "web/BaseApi.php" );
 require_once( INCLUDE_DIR . "DB/PlaylistInfo.php" );
 require_once( INCLUDE_DIR . "DB/MediaInfo.php" );
+require_once( INCLUDE_DIR . "web/ShortSession.php" );
 
 
 class RegisterMediaApi extends BaseApi

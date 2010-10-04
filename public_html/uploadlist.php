@@ -6,6 +6,7 @@ require_once( INCLUDE_DIR . "DB/VoiceInfo.php" );
 require_once( INCLUDE_DIR . "File/ImageFile.php" );
 require_once( INCLUDE_DIR . "DB/ImageInfo.php" );
 require_once( INCLUDE_DIR . "web/MediaPaging.php" );
+require_once( INCLUDE_DIR . "web/ShortSession.php" );
 
 
 class UploadListWeb extends BaseWeb
@@ -47,23 +48,27 @@ class UploadListWeb extends BaseWeb
 		{
 			case 'deleting':
 				if( !$voice ) break;
+				ShortSession::get()->updateCookie();
 				$this->voiceDb->getDetail( $voice );
 				$this->assign( 'mode', 'deleting' );
 				$this->assign( 'target_voice_info', $voice );
 				break;
 			case 'delete':
 				if( !$voice ) break;
+				ShortSession::get()->check();
 				$this->voiceFile->delete( $voice );
 				$this->voiceDb->delete( $voice );
 				break;
 				
 			case 'editing':
 				if( !$voice ) break;
+				ShortSession::get()->updateCookie();
 				$this->voiceDb->getDetail( $voice );
 				$this->assign( 'mode', 'editing' );
 				$this->assign( 'target_voice_info', $voice );
 				break;
 			case 'edit':
+				ShortSession::get()->check();
 				$this->handleEdit();
 				break;
 		}
@@ -86,10 +91,11 @@ class UploadListWeb extends BaseWeb
 		$voiceNew = new VoiceInfo( $_REQUEST );
 		$voiceNew->checkDetail();
 
-		if( $_FILES['image_file'] )
-		{	
+		$imageFile = $_FILES['image_file'];
+		if( $imageFile['size'] > 0 )
+		{
 			$imageInfo = $this->imageDb->newInfo( $this->userid );
-			$this->imageFile->save( $_FILES['image_file'], $imageInfo );
+			$this->imageFile->save( $imageFile, $imageInfo );
 			$voiceNew->imageid = $imageInfo->imageid;
 		}
 		

@@ -3,6 +3,8 @@ require_once( "../configure.php" );
 require_once( INCLUDE_DIR . "web/BaseWeb.php" );
 require_once( INCLUDE_DIR . "DB/PlaylistInfo.php" );
 require_once( INCLUDE_DIR . "DB/MediaInfo.php" );
+require_once( INCLUDE_DIR . "web/ShortSession.php" );
+
 
 class MedialistWeb extends BaseWeb
 {	
@@ -50,6 +52,7 @@ class MedialistWeb extends BaseWeb
 
 		if( $this->command )
 		{
+			ShortSession::get()->check();
 			$this->checkOwnPlaylist( $this->play );
 			
 			switch( $this->command )
@@ -74,13 +77,15 @@ class MedialistWeb extends BaseWeb
 					$this->deleteMedia( $medias, $this->index );
 					break;
 			}
-
+			
 			$ids = array();
 			foreach( $medias as $media ) $ids[] = $media->mediaid;
 			$this->play->mediaids = $ids;
 			$this->playDb->updateInfo( $this->play );
 		}
 
+		ShortSession::get()->updateCookie();
+		
 		$this->assign( 'media_array', $medias );
 	}
 	

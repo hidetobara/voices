@@ -3,6 +3,7 @@ require_once( "../configure.php" );
 require_once( INCLUDE_DIR . "web/BaseWeb.php" );
 require_once( INCLUDE_DIR . "DB/PlaylistInfo.php" );
 require_once( INCLUDE_DIR . "File/ImageFile.php" );
+require_once( INCLUDE_DIR . "web/ShortSession.php" );
 
 
 class PlaylistWeb extends BaseWeb
@@ -45,16 +46,19 @@ class PlaylistWeb extends BaseWeb
 			case 'edit':
 			case 'update':	
 			case 'delete':
+				ShortSession::get()->check();
 				$this->handleEdit( $_REQUEST['command'] );
 				break;
 			
 			case 'new':
+				ShortSession::get()->check();
 				$this->handleNew();
 				$this->assignPlaylistArray();
 				break;
 
 			case 'all':
 			default:
+				ShortSession::get()->updateCookie();
 				$this->assignPlaylistArray();
 				break;
 		}

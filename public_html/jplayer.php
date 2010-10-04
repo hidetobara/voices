@@ -4,6 +4,7 @@ require_once( INCLUDE_DIR . "web/BaseWeb.php" );
 require_once( INCLUDE_DIR . "DB/VoiceInfo.php" );
 require_once( INCLUDE_DIR . "DB/PlaylistInfo.php" );
 require_once( INCLUDE_DIR . "web/RankingGenerator.php" );
+require_once( INCLUDE_DIR . "web/ShortSession.php" );
 
 
 class PlayerWeb extends BaseWeb
@@ -59,7 +60,6 @@ class PlayerWeb extends BaseWeb
 			$this->media = MediaInfo::getInfo( $mid, array('detail'=>true) );
 			return;
 		}
-		
 	}
 	
 	function handle()
