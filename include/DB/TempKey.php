@@ -16,7 +16,7 @@ class TempKey
 	{
 		if( is_array( $obj ) )
 		{
-			$this->userid = $obj['user_id'];
+			$this->userid = intval($obj['user_id']);
 			$this->updateDate = $obj['update_date'];
 			
 			if( $obj['temp_key'] )

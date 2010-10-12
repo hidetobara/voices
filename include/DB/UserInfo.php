@@ -9,7 +9,7 @@ class UserInfo
 	const CODE_USERNAME_LENGTH = "Username is too long or short !";
 	const CODE_PASSWORD_LENGTH = "Password is too long or short !";
 
-	public $userId;
+	public $userid;
 	public $username;
 	public $passwordMd5;
 	public $passwordLength;
@@ -25,7 +25,7 @@ class UserInfo
 	{
 		if( is_array($obj) )
 		{
-			if($obj['user_id']) $this->userId = $obj['user_id'];
+			if($obj['user_id']) $this->userid = intval($obj['user_id']);
 			if($obj['username']) $this->username = $obj['username'];
 			if($obj['login_time']) $this->loginTime = $obj['login_time'];
 			if($obj['user_status']) $this->userStatus = $obj['user_status'];
@@ -74,7 +74,7 @@ class UserDB extends BaseDB
 
 	function updateUser( UserInfo $rec )
 	{
-		if( !$rec->userId ) return false;
+		if( !$rec->userid ) return false;
 		
 		$sql = sprintf( "Update `%s` SET", self::TABLE_NAME );
 		$params = array();
@@ -94,7 +94,7 @@ class UserDB extends BaseDB
 			$params[':userStatus'] = $rec->userStatus;
 		}
 		$sql .= " WHERE user_id = :userid";
-		$params[':userid'] = $rec->userId;
+		$params[':userid'] = $rec->userid;
 
 		$state = $this->pdo->prepare( $sql );
 		return $state->execute( $params );
@@ -102,12 +102,12 @@ class UserDB extends BaseDB
 	
 	function authorizeUser( UserInfo $rec )
 	{
-		if( $rec->userId )
+		if( $rec->userid )
 		{
 			$sql = sprintf( "SELECT * FROM `%s` WHERE user_id = :userid",
 				self::TABLE_NAME );
 			$state = $this->pdo->prepare( $sql );
-			$params = array( ':userid' => $rec->userId );
+			$params = array( ':userid' => $rec->userid );
 		}
 		else if( $rec->username )
 		{
@@ -126,11 +126,11 @@ class UserDB extends BaseDB
 		if( $hash['password_md5'] != $rec->passwordMd5 ) return null;
 		
 		$rec = new UserInfo( $hash );
-		$sql = sprintf( "UPDATE `%s` SET login_time = NOW() WHERE user_id = :userId",
+		$sql = sprintf( "UPDATE `%s` SET login_time = NOW() WHERE user_id = :userid",
 			self::TABLE_NAME );
 		$state = $this->pdo->prepare( $sql );
 		$state->execute(
-			array( ':userId' => $rec->userId )
+			array( ':userid' => $rec->userid )
 			);
 
 		return $rec;
@@ -140,10 +140,10 @@ class UserDB extends BaseDB
 	{
 		$sql = sprintf( "SELECT * FROM `%s` WHERE",
 			self::TABLE_NAME );
-		if( $rec->userId )
+		if( $rec->userid )
 		{
-			$sql .= " user_id = :userId";
-			$params = array( ':userId' => $rec->userId );
+			$sql .= " user_id = :userid";
+			$params = array( ':userid' => $rec->userid );
 		}
 		elseif( $rec->username )
 		{

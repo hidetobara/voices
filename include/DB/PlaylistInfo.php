@@ -3,7 +3,7 @@ require_once( INCLUDE_DIR . "DB/BaseDB.php" );
 
 class PlaylistInfo
 {
-	const VOICE_MAX = 30;
+	const MEDIA_MAX = 30;
 	
 	public $playlistid;
 	public $userid;
@@ -24,7 +24,7 @@ class PlaylistInfo
 		if( is_array($p['media_ids_array']) ) $this->voiceids = $p['media_ids_array'];
 		if( is_numeric($p['image_id']) ) $this->imageid = (int)$p['image_id'];
 		
-		if( is_array($this->mediaids) ) $this->mediaids = array_slice( $this->mediaids, 0, self::VOICE_MAX );
+		if( is_array($this->mediaids) ) $this->mediaids = array_slice( $this->mediaids, 0, self::MEDIA_MAX );
 	}
 	
 	function getMediaId( $index )
@@ -34,7 +34,7 @@ class PlaylistInfo
 	}
 	function addMediaId( $vid )
 	{
-		if( is_numeric($vid) ) $vid = "v" . $vid;
+		if( count($this->mediaids) >= self::MEDIA_MAX ) throw new VoiceMessageException('OVER_MEDIA_MAX');
 		$this->mediaids[] = $vid;
 	}
 }
@@ -50,7 +50,7 @@ class PlaylistInfoDB extends BaseDB
 		$params = array(
 			':userid' => $info->userid,
 			':title' => $info->title,
-			':vids' => is_array($info->mediaids) ? implode(',',$info->mediaids) : "",
+			':vids' => is_array($info->mediaids) ? implode(';',$info->mediaids) : "",
 			':imageid' => $info->imageid );
 		$state = $this->pdo->prepare( $sql );
 		if( !$state->execute( $params ) ) return null;

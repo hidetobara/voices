@@ -13,6 +13,7 @@ NOT_UPLOAD;Can not upload !;アップロードできません。
 NO_FILE;No file exists !;ファイルがありません。
 
 NO_PLAYLIST_INFO;No playlist !;プレイリストがありません。
+OVER_MEDIA_MAX;Too many media !;登録しすぎです。
 
 NOT_AUDIO_FILE;This file is not audio file.;音声ファイルではありません。
 NO_VOICE_INFO;No voice info.;音声情報がありません。

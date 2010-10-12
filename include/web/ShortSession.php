@@ -1,5 +1,6 @@
 <?php
 require_once( INCLUDE_DIR . "web/LoginSession.php" );
+require_once( INCLUDE_DIR . "VoiceException.php" );
 
 
 class ShortSession
@@ -14,7 +15,8 @@ class ShortSession
 	const ERROR_NO_USERID = 'No userid !';
 	const ERROR_NO_SHORT_SESSION = 'No short session !';
 	const ERROR_INVALID_SESSION = 'Out-of-date short session !';
-	
+
+	const ALIVE_TIME_MIN = 10;
 	const SESSION_SHORT = 'session_short';
 	const LENGTH = 8;
 	
@@ -22,9 +24,9 @@ class ShortSession
 	
 	function __construct( $opt=null )
 	{
-		$this->userid = $_REQUEST[ LoginSession::SESSION_USERID ];
+		$this->userid = (int)$_REQUEST[ LoginSession::SESSION_USERID ];
 		
-		if( $opt['userid'] ) $this->userid = $opt['userid'];
+		if( $opt['userid'] ) $this->userid = (int)$opt['userid'];
 	}
 	
 	function make( $date=null )
@@ -39,7 +41,7 @@ class ShortSession
 	}
 	function updateCookie()
 	{
-		setcookie( self::SESSION_SHORT, $this->make(), time() + 60 * 10, $this->getHostPath(), $this->getHost() );
+		setcookie( self::SESSION_SHORT, $this->make(), time() + 60 * self::ALIVE_TIME_MIN, $this->getHostPath(), $this->getHost() );
 	}
 	function getSessionArray()
 	{
@@ -58,7 +60,7 @@ class ShortSession
 		if( !$received ) throw new VoiceException( self::ERROR_NO_SHORT_SESSION );
 		
 		$date = new DateTime();
-		for( $min = 10; $min >= 0; $min-- )
+		for( $min = self::ALIVE_TIME_MIN; $min >= 0; $min-- )
 		{
 			$made = $this->make( $date );
 			if( $received == $made ) return $this->userid;
