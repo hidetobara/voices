@@ -9,7 +9,7 @@
 		{$message}<br />
 
 		{if $user_info}
-			userid: {$user_info->userId}<br />
+			userid: {$user_info->userid}<br />
 			username: {$user_info->username}<br />
 			<br />
 		{/if}
