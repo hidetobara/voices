@@ -28,7 +28,7 @@
 					artist: <input type="text" name="artist" value="{$upinfo->artist|escape}"/><br />
 					description: <input type="text" name="description" value="{$upinfo->description|escape}"/><br />
 					image: <input type="file" name="image_file"/><br />
-					voice: <input type="file" name="voice_file"/><br />
+					mp3: <input type="file" name="voice_file"/><br />
 				</div>
 				<div align="right">
 					<input type="submit" value="Confirm"/>
