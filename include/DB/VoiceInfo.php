@@ -1,4 +1,5 @@
 <?php
+require_once( INCLUDE_DIR . "VoiceException.php" );
 require_once( INCLUDE_DIR . "DB/BaseDB.php" );
 require_once( INCLUDE_DIR . "DB/MediaInfo.php" );
 
@@ -56,7 +57,6 @@ class VoiceInfo extends MediaInfo
 		if(is_numeric($p['image_id'])) $this->imageid = intval($p['image_id']);
 		if($p['title']) $this->title = strip_tags($p['title']);
 		if($p['artist']) $this->artist = strip_tags($p['artist']);
-		if(is_numeric($p['played_count'])) $this->playedCount = intval($p['played_count']);
 		if($p['description']) $this->description = htmlspecialchars($p['description']);
 		if(is_string($p['tags']))
 		{
@@ -97,7 +97,7 @@ class VoiceInfo extends MediaInfo
 			'artist' => $this->artist,
 			'description' => $this->description,
 			'played_count' => $this->playedCount );
-		if( $this->imageid ) $array['image_url'] = sprintf( "%simage.php?id=%d", API_URL, $this->imageid );
+		//if( $this->imageid ) $array['image_url'] = sprintf( "%simage.php?id=%d", API_URL, $this->imageid );
 		return $array;
 	}
 }

@@ -42,9 +42,9 @@ class SessionWeb extends BaseWeb
 			case self::MODE_NOT_LOGINED:
 				if( $command!='login' ) break;
 				$this->user = $this->db->authorizeUser( $this->user );
-				if( !$this->user->userId ) throw new VoiceException(CommonMessages::get()->msg('LOGIN_ERROR'));
+				if( !$this->user->userid ) throw new VoiceException(CommonMessages::get()->msg('LOGIN_ERROR'));
 				
-				LoginSession::get()->make( $this->user->userId ); 
+				LoginSession::get()->make( $this->user->userid ); 
 				
 				$this->assignHash( LoginSession::get()->getSessionArray() );
 				$this->assign('logined',true);
