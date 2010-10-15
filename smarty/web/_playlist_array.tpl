@@ -22,5 +22,6 @@
 	</tr>
 {foreachelse}
 	<tr><td>No playlists.</td></tr>
+	<tr><td><hr /></td></tr>
 {/foreach}
 </table>

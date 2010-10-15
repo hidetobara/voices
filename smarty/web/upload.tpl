@@ -24,11 +24,12 @@
 			<form action="{$HOME_URL}upload.php" method="POST" enctype="multipart/form-data"/>
 				<div align="left">
 					<input type="hidden" name="command" value="upload"/>					
-					title: <input type="text" name="title" value="{$upinfo->title|escape}"/><br />
-					artist: <input type="text" name="artist" value="{$upinfo->artist|escape}"/><br />
+					title *: <input type="text" name="title" value="{$upinfo->title|escape}"/><br />
+					artist *: <input type="text" name="artist" value="{$upinfo->artist|escape}"/><br />
 					description: <input type="text" name="description" value="{$upinfo->description|escape}"/><br />
 					image: <input type="file" name="image_file"/><br />
-					mp3: <input type="file" name="voice_file"/><br />
+					mp3 *: <input type="file" name="voice_file"/><br />
+					(* you neet to input)<br />
 				</div>
 				<div align="right">
 					<input type="submit" value="Confirm"/>

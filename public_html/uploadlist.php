@@ -104,6 +104,8 @@ class UploadListWeb extends BaseWeb
 	
 	function assignMyInfos( $infos )
 	{
+		if( count($infos) == 0 ) return;
+		
 		foreach( $infos as $info )
 		{
 			$this->voiceDb->getDetail($info);

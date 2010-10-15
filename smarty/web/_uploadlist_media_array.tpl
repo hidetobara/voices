@@ -29,6 +29,6 @@
 	</td>
 	</tr>
 {foreachelse}
-	no items.<br/>
+	no items.<br /><br />
 {/foreach}
 </table>

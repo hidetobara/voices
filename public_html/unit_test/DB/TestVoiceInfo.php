@@ -22,7 +22,7 @@ class TestVoiceInfo extends PHPUnit2_Framework_TestCase
 			'artist' => 'artist',
 			'description' => 'description',
 			'tags' => 'hoge huga',
-			'played_count' => 999,
+			'played_count' => -999,
 		);
 		$this->dataSub = array(
 			'voice_id' => 999,
@@ -35,7 +35,7 @@ class TestVoiceInfo extends PHPUnit2_Framework_TestCase
 			'artist' => 'artist_',
 			'description' => 'description_',
 			'tags' => 'hoge huga',
-			'played_count' => 998,
+			'played_count' => -998,
 		);
 		
 	}
@@ -54,7 +54,7 @@ class TestVoiceInfo extends PHPUnit2_Framework_TestCase
 		$this->assertSame( 'artist', $info->artist );
 		$this->assertSame( 'description', $info->description );
 		$this->assertSame( array('hoge','huga'), $info->tags );
-		$this->assertSame( 999, $info->playedCount );
+		$this->assertSame( -999, $info->playedCount );
 		$this->assertSame( true, $info->isVisible );
 	}
 	
@@ -137,12 +137,12 @@ class TestVoiceInfo extends PHPUnit2_Framework_TestCase
 		$store->updatePlaying( $infoSub );
 		$result = $store->getPlaying( $infoSub );
 
-		$this->assertSame( 998, $result->playedCount );
+		$this->assertSame( -998, $result->playedCount );
 
 		$store->updatePlaying( $info );
 		$result = $store->getPlaying( $info );
 
-		$this->assertSame( 999, $result->playedCount );
+		$this->assertSame( -999, $result->playedCount );
 	}
 	
 	function testGetInfosByUser()

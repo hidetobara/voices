@@ -43,7 +43,9 @@ class RankingGeneratorRecent extends RankingGenerator
 		foreach( $list as $vid => $count )
 		{
 			$info = $voiceDb->getInfo( $vid );
+			if( $count < 0 ) continue;
 			if( !$info->isVisible ) continue;
+			
 			$voiceDb->getDetail($info);
 			$voiceDb->getPlaying($info);
 			$infos[] = $info;
