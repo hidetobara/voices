@@ -31,7 +31,7 @@ class FileCache
 		return $data;
 	}
 	
-	function path( $key )
+	private function path( $key )
 	{
 		return DATA_DIR . "/cache/" . $key;
 	}

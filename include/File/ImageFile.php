@@ -38,7 +38,8 @@ class ImageFile
 		}
 		$srcSize = array( 'height'=>imagesy( $img ), 'width'=>imagesx( $img ) );
 
-		$dirDst = IMAGE_DIR . $info->uploadTime->format('Y/m-d/');
+		//$dirDst = IMAGE_DIR . $info->uploadTime->format('Y/m-d/');
+		$dirDst = sprintf( "%suser%d/", IMAGE_DIR, $info->userid );
 		if( !file_exists($dirDst) ) mkdir( $dirDst, 0777, true );
 		
 		foreach( array(ImageResourceInfo::ICON_SIZE,ImageResourceInfo::WALL_SIZE) as $blockSize )

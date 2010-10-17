@@ -23,7 +23,7 @@ class TestShortSession extends PHPUnit2_Framework_TestCase
 		$this->assertSame( $this->userid, $result );
 	}
 
-	function testMakeCheckFail()
+	function testMakeCheck_fail()
 	{
 		$date = new DateTime( sprintf("-%d min", ShortSession::ALIVE_TIME_MIN +1) );
 		$key = ShortSession::get()->make( $date );

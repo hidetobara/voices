@@ -22,7 +22,9 @@ class VoiceFile
 		$type = $this->validContentTypes[ $src['type'] ];
 		if( !$type ) throw new VoiceException(CommonMessages::get()->msg('NOT_AUDIO_FILE'),$src);
 		
-		$dirDst = VOICE_DIR . $info->uploadTime->format('Y/m-d/');
+//		$dirDst = VOICE_DIR . $info->uploadTime->format('Y/m-d/');
+		$dirDst = sprintf( "%suser%d/", VOICE_DIR, $info->userid );
+		
 		if( !file_exists($dirDst) ) mkdir( $dirDst, 0777, true );
 		$pathDst = $dirDst . $info->voiceid . ".mp3";
 		
