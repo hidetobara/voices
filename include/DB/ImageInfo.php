@@ -49,7 +49,7 @@ class ImageInfoDB extends BaseDB
 	function getInfos( $userid )
 	{
 		$params = array(
-			':userid' => $info->userid );
+			':userid' => $userid );
 		$sql = sprintf("SELECT * FROM %s WHERE `user_id`=:userid",
 			self::TABLE_INFO );
 		$state = $this->pdo->prepare( $sql );
@@ -58,8 +58,8 @@ class ImageInfoDB extends BaseDB
 		$infos = array();
 		while( $hash = $state->fetch(PDO::FETCH_ASSOC) )
 		{
-			$infos[] = new ImageInfo( $hash );	
+			$infos[] = new ImageInfo( $hash );
 		}
-		return new $infos;
+		return $infos;
 	}
 }

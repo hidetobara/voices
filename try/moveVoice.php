@@ -3,7 +3,7 @@ require_once( '../configure.php' );
 require_once( INCLUDE_DIR . "DB/VoiceInfo.php" );
 
 
-class MoveProcess
+class MoveVoiceProcess
 {
 	function run( $userid )
 	{
@@ -39,6 +39,6 @@ class MoveProcess
 		return sprintf( "%suser%d/%d.mp3", VOICE_DIR, $info->userid, $info->voiceid );
 	}
 }
-$p = new MoveProcess();
+$p = new MoveVoiceProcess();
 for( $i=1000; $i<1020; $i++ ) $p->run( $i );
 ?>
