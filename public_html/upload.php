@@ -70,9 +70,8 @@ class UploadWeb extends BaseWeb
 		///// save image
 		if( $ifile['size'] > 0 )
 		{
-			$iinfo = $this->imageDb->newInfo( $this->userid );
-			$this->imageFile->save( $ifile, $iinfo );
-			$vinfo->imageid = $iinfo->imageid;
+			$imageInfo = $this->imageFile->save( $this->userid, $ifile );
+			$vinfo->imageid = $imageInfo->imageid;
 		}
 
 		///// update record

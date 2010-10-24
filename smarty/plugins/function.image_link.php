@@ -1,6 +1,5 @@
 <?php
 require_once( INCLUDE_DIR . "DB/ImageInfo.php" );
-require_once( INCLUDE_DIR . "DB/ImageResourceInfo.php" );
 
 
 function smarty_function_image_link($params, &$smarty)
@@ -21,7 +20,7 @@ function smarty_function_image_link($params, &$smarty)
 	}
 	
 	$name = $params['size'];
-	$size = ImageResourceInfo::name2size( $name );
+	$size = ImageInfo::name2size( $name );
 	
 	if( !$imageid || !$size )
 	{

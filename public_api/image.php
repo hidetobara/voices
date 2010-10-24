@@ -3,18 +3,18 @@ require_once( "../configure.php" );
 require_once( INCLUDE_DIR . "VoiceException.php" );
 require_once( INCLUDE_DIR . "web/CommonMessages.php" );
 require_once( INCLUDE_DIR . "DB/ImageInfo.php" );
-require_once( INCLUDE_DIR . "DB/ImageResourceInfo.php" );
 require_once( INCLUDE_DIR . "File/ImageFile.php" );
 
 
 class DownloadImage
 {
-	protected $rDb;
-	protected $rInfo;
+	protected $imageDb;
+	protected $imageInfo;
+	protected $size;
 	
 	function __construct( $options=null )
 	{
-		$this->rDb = $options['ImageResourceInfoDB'] ? $options['ImageResourceInfoDB'] : new ImageResourceInfoDB();
+		$this->imageDb = $options['ImageInfoDB'] ? $options['ImageInfoDB'] : new ImageInfoDB();
 	}
 	
 	function run()
@@ -34,18 +34,18 @@ class DownloadImage
 	function initialize()
 	{
 		$imageid = $_REQUEST['id'];
-		$size = ImageResourceInfo::name2size( $_REQUEST['size'] );
-		if( !$imageid || !$size ) throw new VoiceException(CommonMessages::get()->msg('INVALID_PARAMETER'));
-		
-		$this->rInfo = $this->rDb->getInfo( $imageid, $size );
-		if( !$this->rInfo ) throw new VoiceException(CommonMessages::get()->msg('NO_IMAGE_INFO'));
+		$this->size = ImageInfo::name2size( $_REQUEST['size'] );
+		if( !$imageid || !$this->size ) throw new VoiceException(CommonMessages::get()->msg('INVALID_PARAMETER'));
+	
+		$this->imageInfo = $this->imageDb->getInfo( $imageid );
+		if( !$this->imageInfo ) throw new VoiceException(CommonMessages::get()->msg('NO_IMAGE_INFO'));
 	}
 	function handle()
 	{
-		$path = $this->rInfo->dst;
+		$path = $this->imageInfo->getFilePath( $this->size );
 		if( !file_exists($path) ) throw new VoiceException(CommonMessages::get()->msg('NO_FILE'));
 		
-		$ct = ImageFile::type2ContentType( $this->rInfo->type );
+		$ct = ImageFile::type2ContentType( $this->imageInfo->type );
 		if( $ct ) header("Content-type: {$ct}");
 		header('Content-Length: ' . filesize($path));
 		readfile($path);

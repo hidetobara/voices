@@ -95,8 +95,7 @@ class PlaylistWeb extends BaseWeb
 			$imageFile = $_FILES['image_file'];
 			if( $imageFile['size'] > 0 )
 			{
-				$imageInfo = $this->imageDb->newInfo( $this->userid );
-				$this->imageFile->save( $imageFile, $imageInfo );
+				$imageInfo = $this->imageFile->save( $this->userid, $imageFile );
 				$this->info->imageid = $imageInfo->imageid;
 			}
 			

@@ -1,29 +1,28 @@
 <?php
 require_once( INCLUDE_DIR . "DB/ImageInfo.php" );
-require_once( INCLUDE_DIR . "DB/ImageResourceInfo.php" );
 
 
 class ImageFile
 {
 	const ERROR_NO_Image_FILE = 'This file is not image';
 	
-	protected $resourceDb;
-	
 	private $validContentTypes = array(
 		'image/pjpeg' => 'jpg',
 		'image/jpeg' => 'jpg',
 		'image/png' => 'png' );
 
+	protected $imageDb;
+	
 	function __construct( $options=null )
 	{
-		$this->resourceDb = $options['ImageResourceInfoDB'] ? $options['ImageResourceInfoDB'] : new ImageResourceInfoDB();
+		$this->imageDb = $opt['ImageInfoDB'] ? $opt['ImageInfoDB'] : new ImageInfoDB();
 	}
 	
 	/*
 	 * save voice file from temp file
 	 * @return path of voice file
 	 */
-	function save( Array $src, ImageInfo $info )
+	function save( $userid, Array $src )
 	{
 		$pathSrc = $src['tmp_name'];
 		$type = $this->validContentTypes[ $src['type'] ];
@@ -38,12 +37,16 @@ class ImageFile
 		}
 		$srcSize = array( 'height'=>imagesy( $img ), 'width'=>imagesx( $img ) );
 
-		//$dirDst = IMAGE_DIR . $info->uploadTime->format('Y/m-d/');
-		$dirDst = sprintf( "%suser%d/", IMAGE_DIR, $info->userid );
-		if( !file_exists($dirDst) ) mkdir( $dirDst, 0777, true );
-		
-		foreach( array(ImageResourceInfo::ICON_SIZE,ImageResourceInfo::WALL_SIZE) as $blockSize )
+		$info = $this->imageDb->newInfo(
+			new ImageInfo( array('user_id'=>$userid, 'type'=>$type) ) );
+		if( !$info ) throw new VoiceException(CommonMessages::get()->msg('UNKNOWN'));
+
+		foreach( array(ImageInfo::ICON_SIZE,ImageInfo::WALL_SIZE) as $blockSize )
 		{
+			$path = $info->getFilePath( $blockSize );
+			$dirDst = dirname( $path );
+			if( !is_dir($dirDst) ) mkdir( $dirDst, 0777, true );
+			
 			$reSize = $this->calcMaxSize( $blockSize, $srcSize );
 			$dst = imagecreatetruecolor( $reSize['width'], $reSize['height'] );
 			imagecopyresampled( $dst, $img, 0, 0, 0, 0,
@@ -51,18 +54,15 @@ class ImageFile
 			switch( $type )
 			{
 				case 'jpg':
-					$path = $dirDst . $info->imageid . '_' . $blockSize . '.jpg';
 					imagejpeg( $dst, $path, 80 );
 					break;
 				case 'png':
-					$path = $dirDst . $info->imageid . '_' . $blockSize . '.png';
 					imagepng( $dst, $path, 80 );
 					break;
 			}
-			$this->resourceDb->newInfo( new ImageResourceInfo(
-				array('image_id'=>$info->imageid,'type'=>$type,'size'=>$blockSize,'dst'=>$path) ) );
 			imagedestroy( $dst );
 		}
+		return $info;
 	}
 	
 	protected function calcMaxSize( $max, $size )

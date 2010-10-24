@@ -29,7 +29,6 @@ class UploadListWeb extends BaseWeb
 		$this->voiceDb = $opt['voiceDb'] ? $opt['voiceDb'] : new voiceInfoDB();
 		$this->voiceFile = $opt['VoiceFile'] ? $opt['VoiceFile'] : new VoiceFile();
 
-		$this->imageDb = $opt['ImageInfoDB'] ? $opt['ImageInfoDB'] : new ImageInfoDB();
 		$this->imageFile = $opt['ImageFile'] ? $opt['ImageFile'] : new ImageFile();
 	}
 	
@@ -94,8 +93,7 @@ class UploadListWeb extends BaseWeb
 		$imageFile = $_FILES['image_file'];
 		if( $imageFile['size'] > 0 )
 		{
-			$imageInfo = $this->imageDb->newInfo( $this->userid );
-			$this->imageFile->save( $imageFile, $imageInfo );
+			$imageInfo = $this->imageFile->save( $this->userid, $imageFile );
 			$voiceNew->imageid = $imageInfo->imageid;
 		}
 		
