@@ -245,7 +245,7 @@ class VoiceInfoDB extends BaseDB
 		}
 		return $infos;
 	}
-	function getListByRecent( $limit=100 )
+	function getListByRecentPlaying( $limit=100 )
 	{
 		$sql = sprintf( "SELECT * FROM %s WHERE 1 ORDER BY `voice_id` DESC LIMIT 0, %d",
 			self::TABLE_PLAYING, is_numeric($limit) ? $limit : 100 );
@@ -257,6 +257,21 @@ class VoiceInfoDB extends BaseDB
 			$hash = $state->fetch( PDO::FETCH_ASSOC );
 			if( !$hash ) break;
 			$list[ $hash['voice_id'] ] = $hash['played_count'];
+		}
+		return $list;
+	}
+	function getListByRecentRegistered( $limit=100 )
+	{
+		$sql = sprintf( "SELECT * FROM %s WHERE 1 ORDER BY `voice_id` DESC LIMIT 0, %d",
+			self::TABLE_INFO, is_numeric($limit) ? $limit : 100 );
+		$state = $this->pdo->query( $sql );
+
+		$list = array();
+		while( true )
+		{
+			$hash = $state->fetch( PDO::FETCH_ASSOC );
+			if( !$hash ) break;
+			$list[] = $hash['voice_id'];
 		}
 		return $list;
 	}

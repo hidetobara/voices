@@ -11,7 +11,7 @@
 {elseif $mode == "recent"}
 	<div align="center">
 		Recent ranking<br />
-		<a href="{$HOME_URL}jplayer.php?ranking=recent">Play</a><br />
+		<a href="{$HOME_URL}jplayer.php?program=RecentRanking">Play</a><br />
 		<br />
 
 		<table style='border-width: 0'>
@@ -33,6 +33,11 @@
 	</div>
 	
 {/if}
+
+	<div align="center">
+		<div>and <a href="{$HOME_URL}jplayer.php?program=RandomPlay">random play</a></div>
+		<br />
+	</div>
 
 {include file='web/_footer.tpl'}
 </body>

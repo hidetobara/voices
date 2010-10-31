@@ -8,11 +8,15 @@
 <div align="center">
 	<br />
 	<div>Put once, play anywhere !</div>
+	{if $session_userid}
+		<div><a href="{$HOME_URL}jplayer.php?program=RandomPlay">Random play</a></div>	
+	{/if}
 	<br />
 	<div><a href='./session.php'>Login/Logout</a></div>
-	<div><a href='./ranking.php'>Ranking</a></div>
-	<div><a href='./playlist.php'>Playlist</a></div>
-	<div><a href='./mypage.php'>My page</a></div>
+	{if $session_userid}
+		<div><a href='./playlist.php'>Playlist</a></div>
+		<div><a href='./mypage.php'>My page</a></div>
+	{/if}
 </div>
 
 </body>

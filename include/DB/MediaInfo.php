@@ -23,7 +23,7 @@ class MediaInfo
 			if( $info && $opt['playing']) $voiceDb->getPlaying($info);
 			return $info;
 		}
-		return false;
+		return null;
 	}
 }
 ?>
