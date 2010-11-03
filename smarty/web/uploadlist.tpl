@@ -53,6 +53,9 @@
 		<div>My media: {$my_total_size} KB / {$size_limit} KB</div>
 		<br />
 		
+		<div><a href="{$HOME_URL}jplayer.php?program=RandomPlaySelf">My random play</a></div>
+		<br />
+		
 		{if $paging->pageCount > 1}
 			<div>
 			{foreach from=$paging->pages item=p}

@@ -6,7 +6,7 @@ abstract class BaseProgram
 {
 	protected $userid;
 	protected $memory;
-	//protected $name;
+	//const NAME
 	
 	function __construct( $userid, $mem=null, $opt=null )
 	{

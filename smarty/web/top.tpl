@@ -9,7 +9,7 @@
 	<br />
 	<div>Put once, play anywhere !</div>
 	{if $session_userid}
-		<div><a href="{$HOME_URL}jplayer.php?program=RandomPlay">Random play</a></div>	
+		<div><a href="{$HOME_URL}jplayer.php?program=RandomPlayAll">Try random play</a></div>
 	{/if}
 	<br />
 	<div><a href='./session.php'>Login/Logout</a></div>

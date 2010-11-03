@@ -2,12 +2,8 @@
 require_once( INCLUDE_DIR . "program/BaseProgram.php" );
 
 
-class RandomPlayProgram extends BaseProgram
+abstract class BasePlayProgram extends BaseProgram
 {
-	const NAME = 'RandomPlay';
-	const KEY_CACHE = 'program_random_play_all';
-	const SELECT_LIMIT = 1000;
-	
 	protected $cacher;
 	protected $voiceDb;
 	
@@ -21,6 +17,13 @@ class RandomPlayProgram extends BaseProgram
 		
 		$this->cacher = $opt['Cache'] ? $opt['Cache'] : new FileCache();
 		$this->voiceDb = $opt['VoiceInfoDB'] ? $opt['VoiceInfoDB'] : new VoiceInfoDB();
+	}
+	
+	abstract protected function getCacheKey();
+	protected function getExpireDate()
+	{
+		$date = new DateTime("+3 hour");
+		return $date;
 	}
 	
 	function getInfos()
@@ -38,33 +41,21 @@ class RandomPlayProgram extends BaseProgram
 	
 	protected function loadCache()
 	{	
-		//$array = $this->cacher->get( self::KEY_CACHE );		
+		$array = $this->cacher->get( $this->getCacheKey() );
 		if( !$array ) return null;
 
 		$infos = array();
 		foreach( $array as $hash ) $infos[] = new VoiceInfo($hash);
 		return $infos;
 	}
-	protected function calcInfos()
-	{
-		$list = $this->voiceDb->getListByRecentRegistered( self::SELECT_LIMIT );
-		shuffle( $list );
+
+	abstract protected function calcInfos();
 	
-		$infos = array();
-		foreach( $list as $vid )
-		{
-			$info = $this->voiceDb->getInfo( $vid );
-			if( !$info || !$info->isVisible ) continue;
-			$infos[] = $info;
-		}
-		return $infos;
-	}
 	protected function saveCache( $infos )
 	{
 		$array = array();
 		foreach( $infos as $info ) $array[] = $info->toArray();
-		$expire = new DateTime("+3 hour");	///// 3hour !
-		$this->cacher->set( self::KEY_CACHE, $array, $expire );
+		$this->cacher->set( $this->getCacheKey(), $array, $this->getExpireDate() );
 	}
 	
 	function currentInfo()

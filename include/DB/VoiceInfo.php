@@ -86,6 +86,12 @@ class VoiceInfo extends MediaInfo
 		}
 	}
 	
+	function checkVisible()
+	{
+		if( !is_file($this->dst) ) return false;
+		return true;
+	}
+	
 	function toArray()
 	{
 		$array = array(
@@ -97,7 +103,6 @@ class VoiceInfo extends MediaInfo
 			'artist' => $this->artist,
 			'description' => $this->description,
 			'played_count' => $this->playedCount );
-		//if( $this->imageid ) $array['image_url'] = sprintf( "%simage.php?id=%d", API_URL, $this->imageid );
 		return $array;
 	}
 }
