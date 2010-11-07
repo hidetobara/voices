@@ -83,12 +83,19 @@ class PlayerWeb extends BaseWeb
 		if( !$program ) return;
 		
 		$this->media = $program->currentInfo();
-		$nextMedia = $program->nextInfo();		
 
-		if( $nextMedia )
+		if( $program->previousInfo() )
 		{
-			$this->memory['index'] = $program->index + 1;
-			$string = urlencode(json_encode($this->memory));
+			$memory = $this->memory;
+			$memory['index'] = $program->index - 1;
+			$string = urlencode(json_encode($memory));
+			$this->assign( 'url_previous', sprintf("%sjplayer.php?memory=%s",HOME_URL,$string) );
+		}
+		if( $program->nextInfo() )
+		{
+			$memory = $this->memory;
+			$memory['index'] = $program->index + 1;
+			$string = urlencode(json_encode($memory));
 			$this->assign( 'url_next', sprintf("%sjplayer.php?memory=%s",HOME_URL,$string) );
 		}
 	}

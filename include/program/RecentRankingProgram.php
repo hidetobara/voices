@@ -30,7 +30,9 @@ class RecentRankingProgram extends BasePlayProgram
 			$info = $this->voiceDb->getInfo( $vid );
 			if( $count < 0 ) continue;
 			if( !$info->checkVisible() ) continue;
-			
+
+			$this->voiceDb->getDetail( $info );
+			$info->playedCount = $count;
 			$infos[] = $info;
 			if( count($infos) >= self::SHOW_LIMIT ) break;
 		}		

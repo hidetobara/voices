@@ -1,13 +1,13 @@
 <?php
 require_once( "../configure.php" );
 require_once( INCLUDE_DIR . "web/BaseWeb.php" );
-require_once( INCLUDE_DIR . "web/RankingGenerator.php" );
+require_once( INCLUDE_DIR . "program/ProgramHandler.php" );
 
 
 class RankingPage extends BaseWeb
 {
-	protected $mode;
-	const MODE_RECENT = 'recent';
+	const DEFAULT_NAME = 'RecentRanking';
+	protected $program;
 	
 	function __construct( $opt=null )
 	{
@@ -19,22 +19,23 @@ class RankingPage extends BaseWeb
 	
 	function initialize()
 	{
+		$this->checkSession();
 		$this->assignSession();
 		
-		$this->mode = self::MODE_RECENT;
+		$name = $_REQUEST['program'] ? $_REQUEST['program'] : self::DEFAULT_NAME;
+		$memory = array( 'program'=>$name );
+		$this->program = ProgramHandler::handleMemory( $this->userid, $memory );
+		
+		$this->assign( 'program', $name );
 	}
 	
 	function handle()
 	{
-		$generator = RankingGenerator::factory( $this->mode );
-		
-		if( $generator )
+		if( $this->program )
 		{
-			$infos = $generator->get();
+			$infos = $this->program->getInfos();
 			$this->assign( 'media_array', $infos );
 		}
-		
-		$this->assign( 'mode', $this->mode );
 	}
 }
 $page = new RankingPage();

@@ -14,9 +14,18 @@
 	<br />
 	<div><a href='./session.php'>Login/Logout</a></div>
 	{if $session_userid}
+		<div><a href='./ranking.php'>Ranking</a></div>
 		<div><a href='./playlist.php'>Playlist</a></div>
 		<div><a href='./mypage.php'>My page</a></div>
 	{/if}
+	<br />
+</div>
+
+<div align="center">
+	<table>
+		<tr><td><b>Update</b></td></tr>
+		<tr><td>2010/11 add random play.</td></tr>
+	</table>
 </div>
 
 </body>

@@ -47,7 +47,13 @@ class PlaylistProgram extends BaseProgram
 		$this->playlistInfo = $playlistInfo;
 		return $this->playlistInfo;
 	}
-	
+
+	function previousInfo()
+	{
+		$playlistInfo = $this->getPlaylistInfo();
+		$mid = $playlistInfo->getMediaId( $this->index-1 );
+		return MediaInfo::getInfo($mid);
+	}
 	function currentInfo()
 	{
 		$playlistInfo = $this->getPlaylistInfo();

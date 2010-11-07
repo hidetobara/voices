@@ -108,18 +108,20 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan='2'>{$media_info->title|escape}</td>
-		</tr>
-		<tr>
-			<td colspan='2'>{$media_info->artist|escape}</td>
-		</tr>
-		<tr>
-			<td style="text-align: left">
+			<td colspan='2'>
+				<div>{$media_info->title|escape}</div>
+				<div>{$media_info->artist|escape}</div>
 			</td>
-			<td style="text-align: right">
-				<a href="#" id="player_play">play</a>
-				| <a href="#" id="player_pause">pause</a>
-				| <a href="#" id="player_stop">stop</a>
+		</tr>
+		<tr>
+			<td colspan='2'>
+				<div align="center">
+					{if $url_previous}<a href="{$url_previous}">&lt;&lt;</a>{else}&lt;&lt;{/if}
+					&nbsp; <a href="#" id="player_play">▷</a>
+					&nbsp; <a href="#" id="player_pause">| |</a>
+					&nbsp; <a href="#" id="player_stop">□</a>
+					&nbsp; {if $url_next}<a href="{$url_next}">&gt;&gt;</a>{else}&gt;&gt;{/if}
+				</div>
 			</td>
 		</tr>
 		<tr>

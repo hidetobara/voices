@@ -30,6 +30,7 @@ class PlaylistInfo
 	function getMediaId( $index )
 	{
 		if( !is_array($this->mediaids) ) return null;
+		if( $index < 0 ) return null;
 		return $this->mediaids[ $index ];
 	}
 	function addMediaId( $vid )

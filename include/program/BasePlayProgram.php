@@ -57,7 +57,13 @@ abstract class BasePlayProgram extends BaseProgram
 		foreach( $infos as $info ) $array[] = $info->toArray();
 		$this->cacher->set( $this->getCacheKey(), $array, $this->getExpireDate() );
 	}
-	
+
+	function previousInfo()
+	{
+		$infos = $this->getInfos();
+		if( $this->index-1 < 0 ) return null;
+		return $infos[ $this->index-1 ];
+	}
 	function currentInfo()
 	{
 		$infos = $this->getInfos();

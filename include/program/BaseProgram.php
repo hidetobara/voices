@@ -15,6 +15,7 @@ abstract class BaseProgram
 	}
 	
 	abstract function getInfos();
+	abstract function previousInfo();
 	abstract function currentInfo();
 	abstract function nextInfo();
 }
