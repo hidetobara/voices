@@ -9,6 +9,7 @@
 
 <div align="center">
 	<div>Title: {$playlist_info->title|escape}</div>
+	<div><a href="{$HOME_URL}jplayer.php?playlist_id={$playlist_info->playlistid}">Play playlist</a></div>
 	<br />
 	
 	<table style='border-width: 0'>

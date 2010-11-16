@@ -49,7 +49,7 @@
 			</div>
 			<div align="right">
 				<a href="{$HOME_URL}uploadlist.php">&gt;&gt;&gt;Uploadlist</a><br />
-				<a href="{$HOME_URL}upload.php">&gt;&gt;&gt;Upload again</a><br />
+				<a href="{$HOME_URL}upload.php">&gt;&gt;&gt;Upload next</a><br />
 			</div>
 		</td></tr></table>
 	</div>
