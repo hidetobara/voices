@@ -22,22 +22,38 @@
 			var jpTotalTime = $("#player_total_time");
 		 
 			$("#jquery_jplayer").jPlayer({
+			/*	// for 1.2	
 				ready: function () {
 					this.element.jPlayer("setFile", apiMedia ).jPlayer("play");
-					//$('#player_play').css('display','none');
 				},
 				volume: 25,
 				oggSupport: false,
 				preload: 'none'
+			*/
+				ready: function () {
+					$(this).jPlayer("setMedia", { mp3: apiMedia }).jPlayer("play");
+				},
+				swfPath: "js",
+				supplied: "mp3",
+				volume: 0.2,
+				preload: 'none'
 			})
+			.bind( $.jPlayer.event.timeupdate, function(event){
+				$('#player_play_time').text( $.jPlayer.convertTime(event.jPlayer.status.currentTime) );
+				$('#player_total_time').text( $.jPlayer.convertTime(event.jPlayer.status.duration) );
+			})
+			.bind( $.jPlayer.event.ended, function(event){
+				if(urlNext != "") document.location = urlNext;
+			})
+			/*
 			.jPlayer("onProgressChange", function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
 				jpPlayTime.text($.jPlayer.convertTime(playedTime));
 				jpTotalTime.text($.jPlayer.convertTime(totalTime)); 
 			})
 			.jPlayer("onSoundComplete", function() {
-				//this.element.jPlayer("setFile", urlVoiceNext ).jPlayer("play");
 				if(urlNext != "") document.location = urlNext;
 			});
+			*/
 
 			$("#player_play").click( function() {
 				$('#jquery_jplayer').jPlayer("play");
